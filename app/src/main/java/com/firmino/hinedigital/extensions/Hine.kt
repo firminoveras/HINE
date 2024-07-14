@@ -18,6 +18,12 @@ data class Exam(
     val imageId2: Int? = null,
     val imageId1: Int? = null,
     val imageId0: Int? = null,
+    val imageAltId5: Int? = null,
+    val imageAltId4: Int? = null,
+    val imageAltId3: Int? = null,
+    val imageAltId2: Int? = null,
+    val imageAltId1: Int? = null,
+    val imageAltId0: Int? = null,
     val maxScore: Int = 3,
 ) {
     fun getScoreTexts() = listOf(textScore0, textScore1, textScore2, textScore3, textScore4, textScore5)
@@ -97,6 +103,9 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_103,
                 imageId1 = R.drawable.bg_img_101,
                 imageId0 = R.drawable.bg_img_100,
+                imageAltId3 = R.drawable.bg_img_alt_103,
+                imageAltId1 = R.drawable.bg_img_alt_101,
+                imageAltId0 = R.drawable.bg_img_alt_100,
             ),
             Exam(
                 title = "Tronco",
@@ -109,6 +118,9 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_113,
                 imageId1 = R.drawable.bg_img_111,
                 imageId0 = R.drawable.bg_img_110,
+                imageAltId3 = R.drawable.bg_img_alt_113,
+                imageAltId1 = R.drawable.bg_img_alt_111,
+                imageAltId0 = R.drawable.bg_img_alt_110,
             ),
             Exam(
                 title = "Braços",
@@ -138,6 +150,9 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_143,
                 imageId1 = R.drawable.bg_img_141,
                 imageId0 = R.drawable.bg_img_140,
+                imageAltId3 = R.drawable.bg_img_alt_143,
+                imageAltId1 = R.drawable.bg_img_alt_141,
+                imageAltId0 = R.drawable.bg_img_alt_140,
             ),
             Exam(
                 title = "Pés",
@@ -188,6 +203,9 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_303,
                 imageId1 = R.drawable.bg_img_301,
                 imageId0 = R.drawable.bg_img_300,
+                imageAltId3 = R.drawable.bg_img_alt_303,
+                imageAltId1 = R.drawable.bg_img_alt_301,
+                imageAltId0 = R.drawable.bg_img_alt_300,
             ),
             Exam(
                 title = "Elevação passiva do ombro",
@@ -200,6 +218,9 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_313,
                 imageId1 = R.drawable.bg_img_311,
                 imageId0 = R.drawable.bg_img_310,
+                imageAltId3 = R.drawable.bg_img_alt_313,
+                imageAltId1 = R.drawable.bg_img_alt_311,
+                imageAltId0 = R.drawable.bg_img_alt_310,
             ),
             Exam(
                 title = "Pronação/supinação",
@@ -222,6 +243,10 @@ val evaluationsList = listOf(
                 imageId2 = R.drawable.bg_img_332,
                 imageId1 = R.drawable.bg_img_331,
                 imageId0 = R.drawable.bg_img_330,
+                imageAltId3 = R.drawable.bg_img_alt_333,
+                imageAltId2 = R.drawable.bg_img_alt_332,
+                imageAltId1 = R.drawable.bg_img_alt_331,
+                imageAltId0 = R.drawable.bg_img_alt_330,
             ),
             Exam(
                 title = "Ângulo poplíteo",
@@ -235,6 +260,10 @@ val evaluationsList = listOf(
                 imageId2 = R.drawable.bg_img_342,
                 imageId1 = R.drawable.bg_img_341,
                 imageId0 = R.drawable.bg_img_340,
+                imageAltId3 = R.drawable.bg_img_alt_343,
+                imageAltId2 = R.drawable.bg_img_alt_342,
+                imageAltId1 = R.drawable.bg_img_alt_341,
+                imageAltId0 = R.drawable.bg_img_alt_340,
             ),
             Exam(
                 title = "Dorsiflexão de tornozelo",
@@ -248,6 +277,10 @@ val evaluationsList = listOf(
                 imageId2 = R.drawable.bg_img_352,
                 imageId1 = R.drawable.bg_img_351,
                 imageId0 = R.drawable.bg_img_350,
+                imageAltId3 = R.drawable.bg_img_alt_353,
+                imageAltId2 = R.drawable.bg_img_alt_352,
+                imageAltId1 = R.drawable.bg_img_alt_351,
+                imageAltId0 = R.drawable.bg_img_alt_350,
             ),
             Exam(
                 title = "Puxado para sentar",
@@ -257,6 +290,9 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_363,
                 imageId1 = R.drawable.bg_img_361,
                 imageId0 = R.drawable.bg_img_360,
+                imageAltId3 = R.drawable.bg_img_alt_363,
+                imageAltId1 = R.drawable.bg_img_alt_361,
+                imageAltId0 = R.drawable.bg_img_alt_360,
             ),
             Exam(
                 title = "Suspensão ventral",
@@ -266,6 +302,9 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_373,
                 imageId1 = R.drawable.bg_img_371,
                 imageId0 = R.drawable.bg_img_370,
+                imageAltId3 = R.drawable.bg_img_alt_373,
+                imageAltId1 = R.drawable.bg_img_alt_371,
+                imageAltId0 = R.drawable.bg_img_alt_370,
             ),
         )
     ),
@@ -285,6 +324,9 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_403,
                 imageId1 = R.drawable.bg_img_401,
                 imageId0 = R.drawable.bg_img_400,
+                imageAltId3 = R.drawable.bg_img_alt_403,
+                imageAltId1 = R.drawable.bg_img_alt_401,
+                imageAltId0 = R.drawable.bg_img_alt_400,
             ),
             Exam(
                 title = "Suspensão vertical",
@@ -297,6 +339,9 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_413,
                 imageId1 = R.drawable.bg_img_411,
                 imageId0 = R.drawable.bg_img_410,
+                imageAltId3 = R.drawable.bg_img_alt_413,
+                imageAltId1 = R.drawable.bg_img_alt_411,
+                imageAltId0 = R.drawable.bg_img_alt_410,
             ),
             Exam(
                 title = "Inclinação lateral",
@@ -306,6 +351,10 @@ val evaluationsList = listOf(
                 imageId2 = R.drawable.bg_img_422,
                 imageId1 = R.drawable.bg_img_421,
                 imageId0 = R.drawable.bg_img_420,
+                imageAltId3 = R.drawable.bg_img_alt_423,
+                imageAltId2 = R.drawable.bg_img_alt_422,
+                imageAltId1 = R.drawable.bg_img_alt_421,
+                imageAltId0 = R.drawable.bg_img_alt_420,
             ),
             Exam(
                 title = "Paraquedas anterior (após 6 meses)",
@@ -314,6 +363,8 @@ val evaluationsList = listOf(
                 textScore2 = "As características observadas, embora melhores que as do Score 01, são inferiores às do Score 03.",
                 imageId3 = R.drawable.bg_img_433,
                 imageId1 = R.drawable.bg_img_431,
+                imageAltId3 = R.drawable.bg_img_alt_433,
+                imageAltId1 = R.drawable.bg_img_alt_431,
             ),
             Exam(
                 title = "Reflexos tendinosos",
@@ -351,6 +402,10 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_513,
                 imageId2 = R.drawable.bg_img_512,
                 imageId1 = R.drawable.bg_img_511,
+                imageAltId4 = R.drawable.bg_img_alt_514,
+                imageAltId3 = R.drawable.bg_img_alt_513,
+                imageAltId2 = R.drawable.bg_img_alt_512,
+                imageAltId1 = R.drawable.bg_img_alt_511,
                 maxScore = 4
             ),
             Exam(
@@ -373,6 +428,9 @@ val evaluationsList = listOf(
                 imageId4 = R.drawable.bg_img_534,
                 imageId3 = R.drawable.bg_img_533,
                 imageId2 = R.drawable.bg_img_532,
+                imageAltId4 = R.drawable.bg_img_alt_534,
+                imageAltId3 = R.drawable.bg_img_alt_533,
+                imageAltId2 = R.drawable.bg_img_alt_532,
                 maxScore = 4
             ),
             Exam(
@@ -397,6 +455,10 @@ val evaluationsList = listOf(
                 imageId3 = R.drawable.bg_img_553,
                 imageId2 = R.drawable.bg_img_552,
                 imageId1 = R.drawable.bg_img_551,
+                imageAltId4 = R.drawable.bg_img_alt_554,
+                imageAltId3 = R.drawable.bg_img_alt_553,
+                imageAltId2 = R.drawable.bg_img_alt_552,
+                imageAltId1 = R.drawable.bg_img_alt_551,
                 maxScore = 4
             ),
             Exam(

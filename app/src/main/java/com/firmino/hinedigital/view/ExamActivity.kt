@@ -37,6 +37,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -58,6 +59,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -77,6 +79,7 @@ import com.firmino.hinedigital.view.theme.ColorGenderDark
 import com.firmino.hinedigital.view.theme.ColorGenderDarker
 import com.firmino.hinedigital.view.theme.ColorGenderLight
 import com.firmino.hinedigital.view.theme.HINEDigitalTheme
+import com.firmino.hinedigital.view.theme.toggleTheme
 import com.firmino.hinedigital.view.views.DialogTutorial
 import com.firmino.hinedigital.viewmodel.EvaluationViewModel
 import com.firmino.hinedigital.viewmodel.factory.EvaluationModelViewFactory
@@ -366,17 +369,36 @@ class ExamActivity : ComponentActivity() {
             4 -> exam.imageId4
             else -> exam.imageId5
         }
+        val imageAltId = when (score) {
+            0 -> exam.imageAltId0
+            1 -> exam.imageAltId1
+            2 -> exam.imageAltId2
+            3 -> exam.imageAltId3
+            4 -> exam.imageAltId4
+            else -> exam.imageAltId5
+        }
+        var scoreTextExtended by remember(key1 = score, key2 = exam) { mutableStateOf(imageId == null) }
+        var imageAlt by remember { mutableStateOf(false) }
+        imageAlt = false
         ElevatedCard(shape = RoundedCornerShape(32.dp)) {
-            var scoreTextExtended by remember(key1 = score, key2 = exam) { mutableStateOf(imageId == null) }
 
             Box(Modifier.size((width / 1.2f).dp)) {
                 Image(painter = painterResource(id = R.drawable.bg_babybox), contentDescription = null, modifier = Modifier.fillMaxSize())
                 if (imageId != null) {
-                    Image(painter = painterResource(id = imageId), contentDescription = null, modifier = Modifier
+                    Image(painter = painterResource(id = if(imageAltId != null && imageAlt) imageAltId else imageId), contentDescription = null, modifier = Modifier
                         .fillMaxSize()
                         .padding(18.dp)
-                        .padding(bottom = (width / if (scoreTextExtended) 1 else 4).dp).clip(shape = RoundedCornerShape(32.dp))
+                        .padding(bottom = (width / if (scoreTextExtended) 1 else 4).dp)
+                        .clip(shape = RoundedCornerShape(32.dp)),
                     )
+                }
+                if(imageAltId != null && !scoreTextExtended){
+                    IconButton(
+                        modifier = Modifier.align(Alignment.TopEnd).padding(12.dp),
+                        colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
+                        onClick = { imageAlt = !imageAlt }) {
+                        Icon(ImageVector.vectorResource(id = if(imageAlt) R.drawable.ic_image_original else R.drawable.ic_image_vector), contentDescription = null, tint = ColorGenderDark)
+                    }
                 }
                 Surface(
                     modifier = Modifier
