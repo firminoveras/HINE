@@ -12,8 +12,8 @@ android {
         applicationId = "com.firmino.hinedigital"
         minSdk = 26
         targetSdk = 34
-        versionCode = 18
-        versionName = "Versão 0.1.8 - Teste"
+        versionCode = 20
+        versionName = "Versão 0.2.0 - Teste"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true

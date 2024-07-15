@@ -59,7 +59,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -79,7 +78,6 @@ import com.firmino.hinedigital.view.theme.ColorGenderDark
 import com.firmino.hinedigital.view.theme.ColorGenderDarker
 import com.firmino.hinedigital.view.theme.ColorGenderLight
 import com.firmino.hinedigital.view.theme.HINEDigitalTheme
-import com.firmino.hinedigital.view.theme.toggleTheme
 import com.firmino.hinedigital.view.views.DialogTutorial
 import com.firmino.hinedigital.viewmodel.EvaluationViewModel
 import com.firmino.hinedigital.viewmodel.factory.EvaluationModelViewFactory
