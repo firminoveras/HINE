@@ -111,8 +111,6 @@ class InformationActivity : ComponentActivity() {
                     }
                 }
             }
-
-
         }
     }
 
