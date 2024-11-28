@@ -7,9 +7,10 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -24,60 +26,85 @@ import com.firmino.hinedigital.R
 
 
 @Composable
-fun BallsAnim() {
+fun BallsAnim(modifier: Modifier = Modifier) {
     val displayMetrics = LocalContext.current.resources.displayMetrics
-    val screenWidthDp = displayMetrics.widthPixels.toFloat() / displayMetrics.density
+    val size = ((displayMetrics.heightPixels.toFloat() /3) / displayMetrics.density)
 
-    val scale1 = remember { Animatable(1f) }
-    val scale2 = remember { Animatable(1f) }
-    val scale3 = remember { Animatable(1f) }
+    val scale1 = remember { Animatable(1.6f) }
+    val scale2 = remember { Animatable(1.7f) }
+    val scale3 = remember { Animatable(1.3f) }
 
     LaunchedEffect(true) {
         scale1.animateTo(
-            targetValue = 1.8f, animationSpec = infiniteRepeatable(
+            targetValue = 2f, animationSpec = infiniteRepeatable(
                 repeatMode = RepeatMode.Reverse, animation = tween(
-                    durationMillis = 32000, easing = EaseInOutSine
+                    durationMillis = 10000, easing = EaseInOutSine
                 )
             )
         )
     }
+
     LaunchedEffect(true) {
         scale2.animateTo(
-            targetValue = 1.6f, animationSpec = infiniteRepeatable(
+            targetValue = 2f, animationSpec = infiniteRepeatable(
                 repeatMode = RepeatMode.Reverse, animation = tween(
-                    durationMillis = 35000, easing = EaseInOutSine
+                    durationMillis = 17500, easing = EaseInOutSine
                 )
             )
         )
     }
+
     LaunchedEffect(true) {
         scale3.animateTo(
-            targetValue = 1.4f, animationSpec = infiniteRepeatable(
+            targetValue = 2f, animationSpec = infiniteRepeatable(
                 repeatMode = RepeatMode.Reverse, animation = tween(
-                    durationMillis = 36500, easing = EaseInOutSine
+                    durationMillis = 22500, easing = EaseInOutSine
                 )
             )
         )
     }
-    Box(Modifier.alpha(.8f)) {
+
+    Box(modifier.alpha(.8f).fillMaxWidth()) {
         Image(
             painterResource(id = R.drawable.bg_circle_filled),
             contentDescription = null,
-            Modifier.fillMaxSize().scale(scale1.value).offset(x = (screenWidthDp / 3.5f).dp).padding(),
-            Alignment.TopEnd
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .size(size.dp)
+                .offset(x = (size / (3 * scale1.value)).dp, y = -(size / 2).dp)
+                .scale(scale1.value),
         )
+
         Image(
             painterResource(id = R.drawable.bg_circle_notfilled),
             null,
-            Modifier.fillMaxSize().scale(scale2.value).offset(x = 32.dp + (screenWidthDp / 3.5f).dp, y = 62.dp),
-            Alignment.TopEnd
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .size(size.dp)
+                .offset(x = (size / (3 * scale2.value)).dp, y = -(size / 1.7f).dp)
+                .scale(scale2.value),
         )
+
         Image(
             painterResource(id = R.drawable.bg_circle_notfilled),
             null,
-            Modifier.fillMaxSize().scale(scale3.value).offset(x = 120.dp + (screenWidthDp / 3.5f).dp, y = 52.dp),
-            Alignment.TopEnd
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .size(size.dp)
+                .offset(x = -(size / (9 * scale3.value)).dp, y = -(size / 1.5f).dp)
+                .scale(scale3.value),
+        )
+
+        Image(
+            painterResource(id = R.drawable.ic_logo_brand),
+            null,
+            contentScale = ContentScale.FillHeight,
+            alignment = Alignment.TopEnd,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopEnd)
+                .size((size/1.4f).dp)
+                .padding(16.dp)
         )
     }
 }
-

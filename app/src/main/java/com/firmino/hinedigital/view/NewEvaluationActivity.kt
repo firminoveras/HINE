@@ -296,10 +296,10 @@ class NewEvaluationActivity : ComponentActivity() {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                 repeat(state.pageCount) { page ->
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = if(pageStatus[page]) R.drawable.ic_done_on else R.drawable.ic_done_off),
+                        imageVector = ImageVector.vectorResource(id = if (pageStatus[page]) R.drawable.ic_done_on else R.drawable.ic_done_off),
                         contentDescription = null,
-                        tint = if(page == state.currentPage) ColorGenderLight else ColorGenderDarker,
-                        modifier = Modifier.size(if(page == state.currentPage) 20.dp else 12.dp)
+                        tint = if (page == state.currentPage) ColorGenderLight else ColorGenderDarker,
+                        modifier = Modifier.size(if (page == state.currentPage) 20.dp else 12.dp)
                     )
                 }
             }
@@ -456,6 +456,7 @@ class NewEvaluationActivity : ComponentActivity() {
                 unfocusedIndicatorColor = Color.Transparent,
                 focusedSuffixColor = ColorGenderDark,
                 unfocusedSuffixColor = ColorGender,
+
             ),
             shape = RoundedCornerShape(32.dp)
         )

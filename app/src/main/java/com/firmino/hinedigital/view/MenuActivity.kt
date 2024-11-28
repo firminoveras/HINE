@@ -26,7 +26,6 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -69,7 +68,7 @@ class MenuActivity : ComponentActivity() {
             HINEDigitalTheme {
 
                 var infoDialogVisible by remember { mutableStateOf(false) }
-                if(infoDialogVisible) DialogDevNotes(onDismiss = { infoDialogVisible = false }){
+                if (infoDialogVisible) DialogDevNotes(onDismiss = { infoDialogVisible = false }) {
                     val url = "https://github.com/firminoveras"
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
@@ -80,41 +79,37 @@ class MenuActivity : ComponentActivity() {
                             Modifier
                                 .padding(innerPadding)
                                 .fillMaxSize()
-                                .background(
-                                    Brush.linearGradient(listOf(ColorGender, ColorGenderDark))
-                                )
+                                .background(Brush.linearGradient(listOf(ColorGender, ColorGenderDark)))
                         ) {
-                            BallsAnim()
-
-                            Column (
-                                modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
-
-                            ){
-                                IconButton(
-                                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
-                                    onClick = { theme = toggleTheme(this@MenuActivity) }) {
-                                    Icon(ImageVector.vectorResource(id = R.drawable.ic_theme), contentDescription = null, tint = ColorGenderDark)
-                                }
-
-                                IconButton(
-                                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
-                                    onClick = { infoDialogVisible = true }) {
-                                    Icon(ImageVector.vectorResource(id = R.drawable.ic_dev_comment), contentDescription = null, tint = ColorGenderDark)
-                                }
-                            }
-
                             Column {
-                                Spacer(Modifier.weight(1f))
-                                Column(
-                                    Modifier
-                                        .weight(1f)
-                                        .padding(bottom = 24.dp), verticalArrangement = Arrangement.Bottom
-                                ) {
+                                BallsAnim(Modifier.weight(1f))
+                                Column(Modifier.weight(2f)) {
                                     Logo()
-                                    Spacer(modifier = Modifier.height(22.dp))
+                                    Spacer(modifier = Modifier.height(18.dp))
                                     Menu()
+
+                                    Column(
+                                        Modifier
+                                            .fillMaxSize()
+                                            .padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Bottom), horizontalAlignment = Alignment.End
+                                    ) {
+                                        IconButton(
+                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
+                                            onClick = { infoDialogVisible = true }) {
+                                            Icon(ImageVector.vectorResource(id = R.drawable.ic_dev_comment), contentDescription = null, tint = ColorGenderDark)
+                                        }
+                                        IconButton(
+                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
+                                            onClick = { theme = toggleTheme(this@MenuActivity) }) {
+                                            Icon(ImageVector.vectorResource(id = R.drawable.ic_theme), contentDescription = null, tint = ColorGenderDark)
+                                        }
+                                    }
                                 }
                             }
+
+                            Text(text = packageManager.getPackageInfo(packageName, 0).versionName, fontSize = 12.sp, color = Color.White, modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .padding(12.dp))
                         }
                     }
                 }
@@ -133,12 +128,11 @@ class MenuActivity : ComponentActivity() {
             startActivity(Intent(this@MenuActivity, LastEvaluationActivity::class.java))
             finish()
         }
-        ButtonSecondary(label = "Guia Hine"){
+        ButtonSecondary(label = "Guia Hine") {
             startActivity(Intent(this@MenuActivity, GuideActivity::class.java))
             finish()
-
         }
-        ButtonSecondary(label = "Informações"){
+        ButtonSecondary(label = "Informações") {
             startActivity(Intent(this@MenuActivity, InformationActivity::class.java))
             finish()
         }
@@ -157,14 +151,6 @@ class MenuActivity : ComponentActivity() {
                     fontSize = 40.sp,
                 )
             }
-            Text(
-                text = "Diagnóstico precoce de Paralisia Cerebral Infantil",
-                modifier = Modifier.padding(start = 32.dp, end = 64.dp),
-                color = Color.White,
-                fontSize = 18.sp,
-                lineHeight = 28.sp,
-                style = MaterialTheme.typography.bodySmall
-            )
         }
 
     }
