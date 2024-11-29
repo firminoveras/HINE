@@ -6,15 +6,11 @@
     <string name="name">Nome</string>
     <string name="born_date">Data de nascimento</string>
     <string name="gestational_year">Idade Gestacional</string>
-    <string name="gestational_year_info">O número de semanas de gravidez concluídas quando o bebê nasceu. É estimado com base na data do último período menstrual conhecido (LMP) ou por ultrassom.</string>
+    <string name="gestational_year_info">Refere-se a medida da idade da gravidez, com base calculando em semanas, a partir do início da última menstruação (DUM) ou por ultrassom do primeiro trimestre.</string>
     <string name="corrected_age">Idade Corrigida</string>
-    <string name="corrected_age_info">A idade corrigida de um bebê é a idade cronológica menos o número de semanas prematuro que o bebê nasceu. É usada para comparar o desenvolvimento neurológico do bebê com os de bebês nascidos a termo.
-
-Por exemplo, se um bebê nasceu 8 semanas prematuro e tem 12 semanas de idade cronológica, sua idade corrigida seria de 4 semanas (12 semanas - 8 semanas).</string>
+    <string name="corrected_age_info">Refere-se a idade cronológica do recém-nascido menos as semanas que faltaram para completar as 40 semanas de gravidez.</string>
     <string name="cephalic_size">Perimetro Cefalico</string>
-    <string name="cephalic_size_info">O perímetro cefálico do bebê é a medida da circunferência da cabeça do bebê. É uma medida importante do crescimento e desenvolvimento do cérebro.
-
-O perímetro cefálico é medido usando uma fita métrica flexível ao redor da parte mais larga da cabeça do bebê, logo acima das sobrancelhas e orelhas.</string>
+    <string name="cephalic_size_info">O perímetro cefálico é a medida da circunferência da cabeça do bebê. Obtém-se a medida utilizando de uma fita métrica flexível ao redor da parte mais larga do crânio acima das sobrancelhas e orelhas.</string>
     <string name="weeks">Semanas</string>
     <string name="centimeter">cm</string>
     <string name="title_activity_evaluation_list">EvaluationListActivity</string>
