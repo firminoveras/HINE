@@ -87,6 +87,8 @@ import com.firmino.hinedigital.view.theme.HINEDigitalTheme
 import com.firmino.hinedigital.view.theme.ThemeGender
 import com.firmino.hinedigital.view.theme.getColorTheme
 import com.firmino.hinedigital.view.theme.setColorTheme
+import com.firmino.hinedigital.view.views.CreateConfirmDialog
+import com.firmino.hinedigital.view.views.DatePickerModal
 import com.firmino.hinedigital.viewmodel.EvaluationViewModel
 import com.firmino.hinedigital.viewmodel.factory.EvaluationModelViewFactory
 import kotlinx.coroutines.launch
@@ -131,50 +133,35 @@ class NewEvaluationActivity : ComponentActivity() {
         var create by remember { mutableStateOf(false) }
         var created by remember { mutableStateOf(false) }
         var showDatePickerDialog by remember { mutableStateOf(false) }
-        val datePickerState = rememberDatePickerState()
 
         key(genderTheme) {
             if (showDatePickerDialog) {
-                DatePickerDialog(
-                    onDismissRequest = { showDatePickerDialog = false },
-                    confirmButton = {
-                        Button(onClick = { datePickerState.selectedDateMillis?.let { millis -> birthday = millis.toBrazilianDateFormat() }; showDatePickerDialog = false }) {
-                            Text(text = "Escolher data")
-                        }
-                    }) {
-                    DatePicker(state = datePickerState)
-                }
+                DatePickerModal(
+                    onDateSelected = { if (it != null) birthday = it.toBrazilianDateFormat() },
+                    onDismiss = { showDatePickerDialog = false }
+                )
             }
 
             if (create) {
-                AlertDialog(
-                    onDismissRequest = { create = false },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            viewModel.insert(
-                                Evaluation(
-                                    name = name,
-                                    gender = gender,
-                                    birthday = birthday,
-                                    gestationalWeeks = gestationalWeeks.toInt(),
-                                    correctedAge = correctedAge.toInt(),
-                                    cephalicSize = cephalicSize.toInt()
-                                )
+                CreateConfirmDialog(
+                    onConfirm = {
+                        viewModel.insert(
+                            Evaluation(
+                                name = name,
+                                gender = gender,
+                                birthday = birthday,
+                                gestationalWeeks = gestationalWeeks.toInt(),
+                                correctedAge = correctedAge.toInt(),
+                                cephalicSize = cephalicSize.toInt()
                             )
-                            created = true
-                            create = false
-                        }) {
-                            Text(text = "Confirmar")
-                        }
+                        )
+                        created = true
+                        create = false
                     },
-                    dismissButton = {
-                        TextButton(onClick = { create = false }) {
-                            Text(text = stringResource(R.string.cancel))
-                        }
-                    },
-                    title = { Text(text = stringResource(R.string.new_evaluation_title)) },
-                    text = { Text(text = stringResource(R.string.new_evaluation_text)) },
-                    icon = { Icon(Icons.Rounded.CheckCircle, contentDescription = null) })
+                    onDismiss = {
+                        create = false
+                    }
+                )
             }
 
             if (created) DialogEvaluationCreate()
@@ -183,7 +170,6 @@ class NewEvaluationActivity : ComponentActivity() {
             val rememberCoroutine = rememberCoroutineScope()
 
             Box {
-
                 HorizontalPager(state = pageState) { page ->
                     Column(
                         Modifier
@@ -342,7 +328,7 @@ class NewEvaluationActivity : ComponentActivity() {
                 onClick = { onGenderUpdate("masculino") },
                 shape = RoundedCornerShape(topStart = 32.dp, bottomStart = 32.dp),
                 color = if (gender == "masculino") Color.White else Color.Transparent,
-                border = if (gender == "masculino") null else ButtonDefaults.outlinedButtonBorder.copy(width = 2.dp, brush = Brush.linearGradient(listOf(Color.White, Color.White)))
+                border = if (gender == "masculino") null else ButtonDefaults.outlinedButtonBorder().copy(width = 2.dp, brush = Brush.linearGradient(listOf(Color.White, Color.White)))
             ) {
                 Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(ImageVector.vectorResource(id = R.drawable.ic_male), contentDescription = null, tint = if (gender == "masculino") ColorGenderDark else Color.White)
@@ -353,7 +339,7 @@ class NewEvaluationActivity : ComponentActivity() {
                 onClick = { onGenderUpdate("feminino") },
                 shape = RoundedCornerShape(bottomEnd = 32.dp, topEnd = 32.dp),
                 color = if (gender == "feminino") Color.White else Color.Transparent,
-                border = if (gender == "feminino") null else ButtonDefaults.outlinedButtonBorder.copy(width = 2.dp, brush = Brush.linearGradient(listOf(Color.White, Color.White)))
+                border = if (gender == "feminino") null else ButtonDefaults.outlinedButtonBorder().copy(width = 2.dp, brush = Brush.linearGradient(listOf(Color.White, Color.White)))
             ) {
                 Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(ImageVector.vectorResource(id = R.drawable.ic_female), contentDescription = null, tint = if (gender == "feminino") ColorGenderDark else Color.White)
@@ -435,7 +421,7 @@ class NewEvaluationActivity : ComponentActivity() {
             onValueChange = { onUpdate(it.substring(0, kotlin.math.min(it.length, maxLength))) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
-                autoCorrect = false,
+                autoCorrectEnabled = false,
                 imeAction = ImeAction.Done,
                 keyboardType = keyboardType,
             ),
@@ -457,7 +443,7 @@ class NewEvaluationActivity : ComponentActivity() {
                 focusedSuffixColor = ColorGenderDark,
                 unfocusedSuffixColor = ColorGender,
 
-            ),
+                ),
             shape = RoundedCornerShape(32.dp)
         )
     }

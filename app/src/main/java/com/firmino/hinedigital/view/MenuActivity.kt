@@ -107,9 +107,11 @@ class MenuActivity : ComponentActivity() {
                                 }
                             }
 
-                            Text(text = packageManager.getPackageInfo(packageName, 0).versionName, fontSize = 12.sp, color = Color.White, modifier = Modifier
-                                .align(Alignment.BottomStart)
-                                .padding(12.dp))
+                            Text(
+                                text = packageManager.getPackageInfo(packageName, 0).versionName ?: "Versão de Teste", fontSize = 12.sp, color = Color.White, modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .padding(12.dp)
+                            )
                         }
                     }
                 }

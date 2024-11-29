@@ -497,7 +497,7 @@ class LastEvaluationActivity : ComponentActivity() {
             },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
-                autoCorrect = false,
+                autoCorrectEnabled = false,
                 imeAction = ImeAction.Done,
             ),
             colors = TextFieldDefaults.colors(

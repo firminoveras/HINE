@@ -111,7 +111,7 @@ class IntroActivity : ComponentActivity() {
                         ) {
 
                             Text(
-                                text = packageManager.getPackageInfo(packageName, 0).versionName,
+                                text = packageManager.getPackageInfo(packageName, 0).versionName ?: "Versão de Teste",
                                 style = MaterialTheme.typography.titleSmall,
                                 color = Color.White
                             )

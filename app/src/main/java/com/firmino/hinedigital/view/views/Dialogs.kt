@@ -19,9 +19,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -79,18 +81,12 @@ fun EditDialog(evaluation: Evaluation, onDismiss: () -> Unit = {}, onConfirm: (e
     var cephalicSize by remember { mutableStateOf(evaluation.cephalicSize.toString()) }
     var showDatePickerDialog by remember { mutableStateOf(false) }
     var showConfirmDialog by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
 
     if (showDatePickerDialog) {
-        DatePickerDialog(
-            onDismissRequest = { showDatePickerDialog = false },
-            confirmButton = {
-                Button(onClick = { datePickerState.selectedDateMillis?.let { millis -> birthday = millis.toBrazilianDateFormat() }; showDatePickerDialog = false }) {
-                    Text(text = "Escolher data")
-                }
-            }) {
-            DatePicker(state = datePickerState)
-        }
+        DatePickerModal(
+            onDateSelected = { millis -> birthday = millis?.toBrazilianDateFormat() ?: "" },
+            onDismiss = { showDatePickerDialog = false }
+        )
     }
 
     if (showConfirmDialog) {
@@ -121,7 +117,8 @@ fun EditDialog(evaluation: Evaluation, onDismiss: () -> Unit = {}, onConfirm: (e
                     Text(text = "Editar Avaliação", modifier = Modifier.padding(8.dp), style = MaterialTheme.typography.titleLarge, color = Color.White)
                 }
                 EditTextField(value = name, onValueChange = { name = it }, label = LocalContext.current.getString(R.string.name), keyboardType = KeyboardType.Text) {
-                    Icon(ImageVector.vectorResource(id = if (gender == "feminino") R.drawable.ic_female else R.drawable.ic_male), contentDescription = null,
+                    Icon(
+                        ImageVector.vectorResource(id = if (gender == "feminino") R.drawable.ic_female else R.drawable.ic_male), contentDescription = null,
                         tint = if (gender == "feminino") ColorPinkDark else ColorBlueDark, modifier = Modifier.clickable {
                             gender = if (gender == "feminino") "masculino" else "feminino"
                         })
@@ -164,7 +161,7 @@ private fun EditTextField(value: String, isEditable: Boolean = true, onValueChan
             },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
-                autoCorrect = false,
+                autoCorrectEnabled = false,
                 imeAction = ImeAction.Next,
                 keyboardType = keyboardType
             ),
@@ -281,12 +278,12 @@ fun DialogTutorial(
                 Spacer(Modifier.height(16.dp))
                 Text(text = title, style = MaterialTheme.typography.titleLarge, color = ColorGenderDarker)
                 Spacer(Modifier.height(8.dp))
-                if(textParagraphs.size>1){
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                        IconButton(onClick = {if(index > 0) index--}) {
+                if (textParagraphs.size > 1) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = { if (index > 0) index-- }) {
                             Icon(Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null, tint = ColorGenderDark)
                         }
-                        Row (horizontalArrangement = Arrangement.spacedBy(3.dp), verticalAlignment = Alignment.CenterVertically){
+                        Row(horizontalArrangement = Arrangement.spacedBy(3.dp), verticalAlignment = Alignment.CenterVertically) {
                             textParagraphs.indices.forEach { i ->
                                 Spacer(
                                     modifier = Modifier
@@ -295,7 +292,7 @@ fun DialogTutorial(
                                 )
                             }
                         }
-                        IconButton(onClick = {if(index < textParagraphs.size-1) index++}) {
+                        IconButton(onClick = { if (index < textParagraphs.size - 1) index++ }) {
                             Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null, tint = ColorGenderDark)
                         }
                     }
@@ -384,4 +381,54 @@ fun DialogDownload(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerModal(
+    onDateSelected: (Long?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState()
+
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = {
+                onDateSelected(datePickerState.selectedDateMillis)
+                onDismiss()
+            }) {
+                Text("OK")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    ) {
+        DatePicker(state = datePickerState)
+    }
+}
+
+@Composable
+fun CreateConfirmDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        confirmButton = {
+            TextButton(onClick = {onConfirm()}) {
+                Text(text = "Confirmar")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text(text = stringResource(R.string.cancel))
+            }
+        },
+        title = { Text(text = stringResource(R.string.new_evaluation_title)) },
+        text = { Text(text = stringResource(R.string.new_evaluation_text)) },
+        icon = { Icon(Icons.Rounded.CheckCircle, contentDescription = null) })
 }
