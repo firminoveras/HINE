@@ -78,6 +78,8 @@ import com.firmino.hinedigital.view.theme.ColorGenderDark
 import com.firmino.hinedigital.view.theme.ColorGenderDarker
 import com.firmino.hinedigital.view.theme.ColorGenderLight
 import com.firmino.hinedigital.view.theme.HINEDigitalTheme
+import com.firmino.hinedigital.view.theme.ThemeGender
+import com.firmino.hinedigital.view.theme.getColorTheme
 import com.firmino.hinedigital.view.views.DialogTutorial
 import com.firmino.hinedigital.viewmodel.EvaluationViewModel
 import com.firmino.hinedigital.viewmodel.factory.EvaluationModelViewFactory
@@ -360,20 +362,20 @@ class ExamActivity : ComponentActivity() {
     @Composable
     private fun ExamImage(width: Int, exam: Exam, score: Int) {
         val imageId = when (score) {
-            0 -> exam.imageId0
-            1 -> exam.imageId1
-            2 -> exam.imageId2
-            3 -> exam.imageId3
-            4 -> exam.imageId4
-            else -> exam.imageId5
+            0 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId0.first else exam.imageId0.second
+            1 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId1.first else exam.imageId1.second
+            2 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId2.first else exam.imageId2.second
+            3 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId3.first else exam.imageId3.second
+            4 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId4.first else exam.imageId4.second
+            else -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId5.first else exam.imageId5.second
         }
         val imageAltId = when (score) {
-            0 -> exam.imageAltId0
-            1 -> exam.imageAltId1
-            2 -> exam.imageAltId2
-            3 -> exam.imageAltId3
-            4 -> exam.imageAltId4
-            else -> exam.imageAltId5
+            0 -> exam.imageId0.third
+            1 -> exam.imageId1.third
+            2 -> exam.imageId2.third
+            3 -> exam.imageId3.third
+            4 -> exam.imageId4.third
+            else -> exam.imageId5.third
         }
         var scoreTextExtended by remember(key1 = score, key2 = exam) { mutableStateOf(imageId == null) }
         var imageAlt by remember { mutableStateOf(false) }
