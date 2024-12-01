@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
@@ -67,6 +68,7 @@ import com.firmino.hinedigital.view.theme.ColorBlueDark
 import com.firmino.hinedigital.view.theme.ColorGender
 import com.firmino.hinedigital.view.theme.ColorGenderDark
 import com.firmino.hinedigital.view.theme.ColorGenderDarker
+import com.firmino.hinedigital.view.theme.ColorGenderLight
 import com.firmino.hinedigital.view.theme.ColorPinkDark
 import kotlin.math.min
 
@@ -166,13 +168,16 @@ private fun EditTextField(value: String, isEditable: Boolean = true, onValueChan
                 keyboardType = keyboardType
             ),
             colors = TextFieldDefaults.colors(
+                selectionColors = TextSelectionColors(handleColor = ColorGender, backgroundColor = ColorGenderLight),
                 focusedTextColor = ColorGenderDarker,
                 unfocusedTextColor = ColorGenderDark,
                 cursorColor = ColorGender,
                 focusedContainerColor = Color.White,
                 unfocusedContainerColor = Color.White,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedSuffixColor = ColorGenderDark,
+                unfocusedSuffixColor = ColorGender,
             ),
             shape = RoundedCornerShape(12.dp),
             singleLine = true,

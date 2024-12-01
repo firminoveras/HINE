@@ -45,7 +45,7 @@
             android:label="@string/title_activity_evaluation_main"
             android:theme="@style/Theme.HINEDigital" />
         <activity
-            android:name=".view.LastEvaluationActivity"
+            android:name=".view.ListEvaluationActivity"
             android:exported="false"
             android:label="@string/title_activity_evaluation_list"
             android:theme="@style/Theme.HINEDigital" />

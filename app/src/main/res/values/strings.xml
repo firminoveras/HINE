@@ -4,7 +4,7 @@
     <string name="title_activity_new_evaluation">NewEvaluationActivity</string>
     <string name="done_and_start">Concluir e Iniciar</string>
     <string name="name">Nome</string>
-    <string name="born_date">Data de nascimento</string>
+    <string name="born_date">Data de Nascimento</string>
     <string name="gestational_year">Idade Gestacional</string>
     <string name="gestational_year_info">Refere-se a medida da idade da gravidez, com base calculando em semanas, a partir do início da última menstruação (DUM) ou por ultrassom do primeiro trimestre.</string>
     <string name="corrected_age">Idade Corrigida</string>
@@ -115,4 +115,5 @@ Prof Leena Haataja</string>
     <string name="hine_extend">AVALIAÇÃO NEUROLÓGICA INFANTIL DE HAMMERSMITH</string>
     <string name="hine_date">(Atualização, fevereiro 2023)</string>
     <string name="pdf_view_text">Para visualizar o PDF gerado, é necessário um aplicativo compatível com arquivos PDF. Caso não possua um instalado, é recomendado a instalação de um visualizador de PDF gratuito, disponível nas lojas de aplicativos do seu dispositivo. Alguns dos aplicativos mais populares incluem o Adobe Acrobat Reader, o Foxit Reader e o Google Drive.</string>
+    <string name="hint_birthdate">Toque para inserir…</string>
 </resources>

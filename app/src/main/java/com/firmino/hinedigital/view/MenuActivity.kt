@@ -127,7 +127,7 @@ class MenuActivity : ComponentActivity() {
             finish()
         }
         ButtonSecondary(label = "Últimas Avaliações") {
-            startActivity(Intent(this@MenuActivity, LastEvaluationActivity::class.java))
+            startActivity(Intent(this@MenuActivity, ListEvaluationActivity::class.java))
             finish()
         }
         ButtonSecondary(label = "Guia Hine") {

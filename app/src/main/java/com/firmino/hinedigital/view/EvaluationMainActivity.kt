@@ -96,7 +96,7 @@ class EvaluationMainActivity : ComponentActivity() {
 
                     ) {
                         Header(subtitle1 = stringResource(R.string.subtitle_hine), subtitle2 = stringResource(R.string.hine_version), onBackPressed = {
-                            startActivity(Intent(this@EvaluationMainActivity, LastEvaluationActivity::class.java))
+                            startActivity(Intent(this@EvaluationMainActivity, ListEvaluationActivity::class.java))
                             finish()
                         })
                         if (evaluation != null) {

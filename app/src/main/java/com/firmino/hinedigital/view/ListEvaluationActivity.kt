@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
@@ -60,6 +61,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -96,7 +98,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.min
 
-class LastEvaluationActivity : ComponentActivity() {
+class ListEvaluationActivity : ComponentActivity() {
 
     private val viewModel: EvaluationViewModel by viewModels { EvaluationModelViewFactory((application as HINEApplication).repository) }
     private var uriId by mutableStateOf(Uri.EMPTY)
@@ -114,7 +116,7 @@ class LastEvaluationActivity : ComponentActivity() {
                             .background(Brush.linearGradient(listOf(ColorGender, ColorGenderDark)))
                     ) {
                         Header(title = stringResource(R.string.last_evaluations), onBackPressed = {
-                            startActivity(Intent(this@LastEvaluationActivity, MenuActivity::class.java))
+                            startActivity(Intent(this@ListEvaluationActivity, MenuActivity::class.java))
                             finish()
                         })
                         Spacer(modifier = Modifier.height(24.dp))
@@ -133,7 +135,7 @@ class LastEvaluationActivity : ComponentActivity() {
         var downloadId by remember { mutableIntStateOf(-1) }
 
         var evaluations by remember { mutableStateOf(listOf<Evaluation>()) }
-        viewModel.allEvaluations.observe(this@LastEvaluationActivity) { evaluations = it }
+        viewModel.allEvaluations.observe(this@ListEvaluationActivity) { evaluations = it }
 
         if (deleteId >= 0) {
             DialogConfirm(
@@ -181,7 +183,7 @@ class LastEvaluationActivity : ComponentActivity() {
                                 deleteId = it.id
                             },
                             onEdit = {
-                                val intent = Intent(this@LastEvaluationActivity, EvaluationMainActivity::class.java)
+                                val intent = Intent(this@ListEvaluationActivity, EvaluationMainActivity::class.java)
                                 intent.putExtra("id", it.id)
                                 startActivity(intent)
                             },
@@ -474,6 +476,7 @@ class LastEvaluationActivity : ComponentActivity() {
         onClear: () -> Unit = {},
         onUpdate: (value: String) -> Unit = {},
     ) {
+        val focusManager = LocalFocusManager.current
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -490,6 +493,7 @@ class LastEvaluationActivity : ComponentActivity() {
                 if (value.isNotBlank()) Icon(
                     imageVector = Icons.Rounded.Clear,
                     contentDescription = null,
+                    tint = ColorGenderDark,
                     modifier = Modifier.clickable { onClear() })
             },
             onValueChange = {
@@ -498,8 +502,11 @@ class LastEvaluationActivity : ComponentActivity() {
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
                 autoCorrectEnabled = false,
-                imeAction = ImeAction.Done,
+                imeAction = ImeAction.Search,
             ),
+            keyboardActions = KeyboardActions(onSearch = {
+                focusManager.clearFocus()
+            }),
             colors = TextFieldDefaults.colors(
                 focusedTextColor = ColorGenderDark,
                 unfocusedTextColor = ColorGender,

@@ -9,16 +9,17 @@ import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -32,14 +33,10 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +46,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -63,6 +59,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -193,13 +191,13 @@ class NewEvaluationActivity : ComponentActivity() {
 
                             1 -> {
                                 Text(stringResource(R.string.born_date), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
-                                TextInput(value = birthday, isEditable = false, maxLength = 10) {
+                                TextInput(modifier = Modifier.pointerInput(birthday) {
+                                    awaitEachGesture {
+                                        awaitFirstDown(pass = PointerEventPass.Initial)
+                                        if (waitForUpOrCancellation(pass = PointerEventPass.Initial) != null) showDatePickerDialog = true
+                                    }
+                                }, value = birthday, hint = stringResource(R.string.hint_birthdate), isEditable = false, maxLength = 10, trailingIcon = { Icon(Icons.Rounded.DateRange, contentDescription = null, tint = ColorGenderDark) }) {
                                     rememberCoroutine.launch { pageState.animateScrollToPage(2) }
-                                }
-                                Button(onClick = { showDatePickerDialog = true }, colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = ColorGenderDark)) {
-                                    Icon(Icons.Rounded.DateRange, contentDescription = null)
-                                    Spacer(Modifier.width(8.dp))
-                                    Text("Selecionar Data")
                                 }
                             }
 
@@ -355,7 +353,7 @@ class NewEvaluationActivity : ComponentActivity() {
             onDismissRequest = { },
             confirmButton = {
                 TextButton(onClick = {
-                    startActivity(Intent(this@NewEvaluationActivity, LastEvaluationActivity::class.java))
+                    startActivity(Intent(this@NewEvaluationActivity, ListEvaluationActivity::class.java))
                     finish()
                 }) {
                     Text(text = "Confirmar")
@@ -403,21 +401,26 @@ class NewEvaluationActivity : ComponentActivity() {
 
     @Composable
     private fun TextInput(
+        modifier: Modifier = Modifier,
         keyboardType: KeyboardType = KeyboardType.Text,
         maxLength: Int = 256,
         value: String = "",
         onUpdate: (value: String) -> Unit = {},
         isEditable: Boolean = true,
         suffix: String = "",
+        hint: String = "",
+        trailingIcon: @Composable () -> Unit = {},
         onDone: () -> Unit = {}
     ) {
         val keyboardController = LocalSoftwareKeyboardController.current
         TextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             readOnly = !isEditable,
             value = value,
+            placeholder = { Text(text = hint, color = ColorGender) },
             singleLine = true,
             suffix = { Text(suffix) },
+            trailingIcon = trailingIcon,
             onValueChange = { onUpdate(it.substring(0, kotlin.math.min(it.length, maxLength))) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
@@ -442,8 +445,7 @@ class NewEvaluationActivity : ComponentActivity() {
                 unfocusedIndicatorColor = Color.Transparent,
                 focusedSuffixColor = ColorGenderDark,
                 unfocusedSuffixColor = ColorGender,
-
-                ),
+            ),
             shape = RoundedCornerShape(32.dp)
         )
     }
