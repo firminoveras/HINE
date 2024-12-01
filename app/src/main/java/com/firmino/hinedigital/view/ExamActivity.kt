@@ -31,9 +31,10 @@ import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -165,7 +166,7 @@ class ExamActivity : ComponentActivity() {
             ) {
                 ExamImage(width, exam, evaluationModel.scores[evaluationIndex][examIndex])
                 Spacer(Modifier.height(12.dp))
-                ExamScale(width, exam, evaluationModel.scores[evaluationIndex][examIndex]) {
+                ExamScale(exam, evaluationModel.scores[evaluationIndex][examIndex]) {
                     val copyScores = evaluationModel.scores.toMutableList()
                     copyScores[evaluationIndex][examIndex] = it
                     onEvaluationUpdate(evaluationModel.copy(scores = copyScores))
@@ -310,51 +311,24 @@ class ExamActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun ExamScale(width: Int, exam: Exam, score: Int, onScoreChange: (newScore: Int) -> Unit) {
-        Column(Modifier.width(width.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp),
-                horizontalArrangement = (if (score > exam.maxScore / 2) Arrangement.End else Arrangement.Start)
+    private fun ExamScale(exam: Exam, score: Int, onScoreChange: (newScore: Int) -> Unit) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(
+                onClick = { if (score > 0) onScoreChange(score - 1) },
+                enabled = score > 0,
+                colors = IconButtonDefaults.iconButtonColors(containerColor = ColorGenderDark, contentColor = Color.White, disabledContainerColor = ColorGender)
             ) {
-                if (score <= exam.maxScore / 2) Spacer(Modifier.width((((width - 12) / exam.maxScore) * score).dp))
-                ElevatedCard(
-                    colors = CardDefaults.cardColors(containerColor = ColorGender),
-                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp, bottomStart = (if (score > exam.maxScore / 2) 16 else 0).dp, bottomEnd = (if (score > exam.maxScore / 2) 0 else 16).dp)
-                ) {
-                    Row(Modifier.padding(horizontal = 8.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(imageVector = Icons.Rounded.Star, null, tint = Color.White, modifier = Modifier.size(32.dp))
-                        Text(text = "$score", fontSize = 22.sp, color = ColorGenderDarker, fontWeight = FontWeight.Black)
-                        Text(text = "/${exam.maxScore}", fontSize = 16.sp, color = ColorGenderDark)
-                    }
-                }
-                if (score > exam.maxScore / 2) Spacer(Modifier.width((((width - 12) / exam.maxScore) * (exam.maxScore - score)).dp))
+                Text(text = "-", fontWeight = FontWeight.Black)
             }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = ColorGender, shape = RoundedCornerShape(120.dp))
-                    .padding(8.dp)
+            repeat(exam.maxScore) { index ->
+                Icon(if (index < score) Icons.Rounded.Star else ImageVector.vectorResource(R.drawable.ic_star_border), contentDescription = null, tint = ColorGenderDark, modifier = Modifier.size(32.dp))
+            }
+            IconButton(
+                onClick = { if (score < exam.maxScore) onScoreChange(score + 1) },
+                enabled = score < exam.maxScore,
+                colors = IconButtonDefaults.iconButtonColors(containerColor = ColorGenderDark, contentColor = Color.White, disabledContainerColor = ColorGender)
             ) {
-                Spacer(
-                    Modifier
-                        .height(8.dp)
-                        .fillMaxWidth()
-                        .background(color = Color.White, shape = RoundedCornerShape(12.dp))
-                        .align(Alignment.Center)
-                )
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                    (0..<(exam.maxScore + 1)).forEach {
-                        Surface(
-                            modifier = Modifier.size((if (it == score) 28 else 22).dp),
-                            color = if (it == score) ColorGenderDark else Color.White,
-                            shape = CircleShape,
-                            onClick = { if (it != score) onScoreChange(it) }
-                        ) {}
-                    }
-                }
+                Text(text = "+", fontWeight = FontWeight.Black)
             }
         }
     }
@@ -362,12 +336,12 @@ class ExamActivity : ComponentActivity() {
     @Composable
     private fun ExamImage(width: Int, exam: Exam, score: Int) {
         val imageId = when (score) {
-            0 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId0.first else exam.imageId0.second
-            1 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId1.first else exam.imageId1.second
-            2 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId2.first else exam.imageId2.second
-            3 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId3.first else exam.imageId3.second
-            4 -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId4.first else exam.imageId4.second
-            else -> if(getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId5.first else exam.imageId5.second
+            0 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId0.first else exam.imageId0.second
+            1 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId1.first else exam.imageId1.second
+            2 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId2.first else exam.imageId2.second
+            3 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId3.first else exam.imageId3.second
+            4 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId4.first else exam.imageId4.second
+            else -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId5.first else exam.imageId5.second
         }
         val imageAltId = when (score) {
             0 -> exam.imageId0.third
@@ -381,23 +355,26 @@ class ExamActivity : ComponentActivity() {
         var imageAlt by remember { mutableStateOf(false) }
         imageAlt = false
         ElevatedCard(shape = RoundedCornerShape(32.dp)) {
-
             Box(Modifier.size((width / 1.2f).dp)) {
                 Image(painter = painterResource(id = R.drawable.bg_babybox), contentDescription = null, modifier = Modifier.fillMaxSize())
                 if (imageId != null) {
-                    Image(painter = painterResource(id = if(imageAltId != null && imageAlt) imageAltId else imageId), contentDescription = null, modifier = Modifier
-                        .fillMaxSize()
-                        .padding(18.dp)
-                        .padding(bottom = (width / if (scoreTextExtended) 1 else 4).dp)
-                        .clip(shape = RoundedCornerShape(32.dp)),
+                    Image(
+                        painter = painterResource(id = if (imageAltId != null && imageAlt) imageAltId else imageId), contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(18.dp)
+                            .padding(bottom = (width / if (scoreTextExtended) 1 else 4).dp)
+                            .clip(shape = RoundedCornerShape(32.dp)),
                     )
                 }
-                if(imageAltId != null && !scoreTextExtended){
+                if (imageAltId != null && !scoreTextExtended) {
                     IconButton(
-                        modifier = Modifier.align(Alignment.TopEnd).padding(12.dp),
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(12.dp),
                         colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
                         onClick = { imageAlt = !imageAlt }) {
-                        Icon(ImageVector.vectorResource(id = if(imageAlt) R.drawable.ic_image_original else R.drawable.ic_image_vector), contentDescription = null, tint = ColorGenderDark)
+                        Icon(ImageVector.vectorResource(id = if (imageAlt) R.drawable.ic_image_original else R.drawable.ic_image_vector), contentDescription = null, tint = ColorGenderDark)
                     }
                 }
                 Surface(
@@ -411,14 +388,17 @@ class ExamActivity : ComponentActivity() {
                     color = Color.White
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                            repeat(exam.maxScore){ index ->
-                                Icon(if(index < score) Icons.Rounded.Star else ImageVector.vectorResource(R.drawable.ic_star_border), contentDescription = null, tint = ColorGenderDark)
-                            }
-                        }
-                        if(exam.getScoreTexts()[score].isNotBlank()){
+                        ElevatedAssistChip(
+                            onClick = {},
+                            label = { Text(text = "$score", fontWeight = FontWeight.Black) },
+                            leadingIcon = {Icon(Icons.Rounded.Star, contentDescription = null, tint = Color.White)},
+                            colors = AssistChipDefaults.elevatedAssistChipColors(containerColor = ColorGenderDark, labelColor = Color.White)
+                        )
+                        if (exam.getScoreTexts()[score].isNotBlank()) {
                             Text(
-                                modifier = Modifier.padding(horizontal = 12.dp).padding(bottom = 12.dp),
+                                modifier = Modifier
+                                    .padding(horizontal = 12.dp)
+                                    .padding(bottom = 12.dp),
                                 text = exam.getScoreTexts()[score].replace(";", "\n"),
                                 overflow = TextOverflow.Ellipsis,
                                 color = ColorGenderDarker,
@@ -436,25 +416,27 @@ class ExamActivity : ComponentActivity() {
     private fun TitleCard(exam: Exam) {
         var infoVisible by remember { mutableStateOf(false) }
 
-        if(infoVisible){
+        if (infoVisible) {
             DialogTutorial(
                 title = exam.title,
                 tutorial = exam.tutorial,
-                onDismiss = {infoVisible = false},
+                onDismiss = { infoVisible = false },
             )
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth().height(100.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-                Text(text = exam.subtitle, textAlign = TextAlign.Center, color = ColorGenderDarker, style = MaterialTheme.typography.labelMedium)
-                Row(modifier = Modifier.clickable { infoVisible = true }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
-                    Icon(Icons.Rounded.Info, contentDescription = null, tint = ColorGenderDark, modifier = Modifier.size(20.dp))
-                    Spacer(Modifier.width(4.dp))
-                    Text(text = stringResource(R.string.know_more), fontSize = 12.sp, color = ColorGenderDark)
-                }
+            Text(text = exam.subtitle, textAlign = TextAlign.Center, color = ColorGenderDarker, style = MaterialTheme.typography.labelMedium)
+            Row(modifier = Modifier.clickable { infoVisible = true }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
+                Icon(Icons.Rounded.Info, contentDescription = null, tint = ColorGenderDark, modifier = Modifier.size(20.dp))
+                Spacer(Modifier.width(4.dp))
+                Text(text = stringResource(R.string.know_more), fontSize = 12.sp, color = ColorGenderDark)
+            }
         }
     }
 
@@ -502,7 +484,7 @@ class ExamActivity : ComponentActivity() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    IconButton(modifier = Modifier.alpha(if(examIndex>0) 1f else 0f), onClick = { onExamChangeClick(-1) }) {
+                    IconButton(modifier = Modifier.alpha(if (examIndex > 0) 1f else 0f), onClick = { onExamChangeClick(-1) }) {
                         Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null, tint = Color.White)
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
@@ -518,7 +500,7 @@ class ExamActivity : ComponentActivity() {
                             }
                         }
                     }
-                    IconButton(modifier = Modifier.alpha(if(examIndex<evaluations[evaluationIndex].exams.size-1) 1f else 0f), onClick = { onExamChangeClick(1) }) {
+                    IconButton(modifier = Modifier.alpha(if (examIndex < evaluations[evaluationIndex].exams.size - 1) 1f else 0f), onClick = { onExamChangeClick(1) }) {
                         Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null, tint = Color.White)
                     }
                 }
