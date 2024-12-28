@@ -7,6 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.EaseInOutSine
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,6 +53,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
@@ -335,14 +341,52 @@ class ExamActivity : ComponentActivity() {
 
     @Composable
     private fun ExamImage(width: Int, exam: Exam, score: Int) {
-        val imageId = when (score) {
-            0 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId0.first else exam.imageId0.second
-            1 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId1.first else exam.imageId1.second
-            2 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId2.first else exam.imageId2.second
-            3 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId3.first else exam.imageId3.second
-            4 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId4.first else exam.imageId4.second
-            else -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId5.first else exam.imageId5.second
+
+        val alpha = remember { Animatable(0f) }
+        LaunchedEffect(true) {
+            alpha.animateTo(
+                targetValue = 1.0f, animationSpec = infiniteRepeatable(
+                    repeatMode = RepeatMode.Reverse, animation = tween(
+                        durationMillis = 2000, easing = EaseInOutSine
+                    )
+                )
+            )
         }
+
+        val imageId = when (score) {
+            0 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId0.first.first else exam.imageId0.first.second
+            1 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId1.first.first else exam.imageId1.first.second
+            2 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId2.first.first else exam.imageId2.first.second
+            3 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId3.first.first else exam.imageId3.first.second
+            4 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId4.first.first else exam.imageId4.first.second
+            else -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId5.first.first else exam.imageId5.first.second
+        }
+        val image2Id = when (score) {
+            0 -> if (exam.imageId0.second != null) {
+                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId0.second!!.first else exam.imageId0.second!!.second
+            } else null
+
+            1 -> if (exam.imageId1.second != null) {
+                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId1.second!!.first else exam.imageId1.second!!.second
+            } else null
+
+            2 -> if (exam.imageId2.second != null) {
+                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId2.second!!.first else exam.imageId2.second!!.second
+            } else null
+
+            3 -> if (exam.imageId3.second != null) {
+                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId3.second!!.first else exam.imageId3.second!!.second
+            } else null
+
+            4 -> if (exam.imageId4.second != null) {
+                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId4.second!!.first else exam.imageId4.second!!.second
+            } else null
+
+            else -> if (exam.imageId5.second != null) {
+                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId5.second!!.first else exam.imageId5.second!!.second
+            } else null
+        }
+
         val imageAltId = when (score) {
             0 -> exam.imageId0.third
             1 -> exam.imageId1.third
@@ -363,9 +407,22 @@ class ExamActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(18.dp)
+                            .alpha(if (image2Id != null && !imageAlt) alpha.value else 1f)
                             .padding(bottom = (width / if (scoreTextExtended) 1 else 4).dp)
                             .clip(shape = RoundedCornerShape(32.dp)),
                     )
+
+                    if(image2Id != null && !imageAlt){
+                        Image(
+                            painter = painterResource(id = image2Id), contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(18.dp)
+                                .alpha(1.0f - alpha.value)
+                                .padding(bottom = (width / if (scoreTextExtended) 1 else 4).dp)
+                                .clip(shape = RoundedCornerShape(32.dp)),
+                        )
+                    }
                 }
                 if (imageAltId != null && !scoreTextExtended) {
                     IconButton(
@@ -391,7 +448,7 @@ class ExamActivity : ComponentActivity() {
                         ElevatedAssistChip(
                             onClick = {},
                             label = { Text(text = "$score", fontWeight = FontWeight.Black) },
-                            leadingIcon = {Icon(Icons.Rounded.Star, contentDescription = null, tint = Color.White)},
+                            leadingIcon = { Icon(Icons.Rounded.Star, contentDescription = null, tint = Color.White) },
                             colors = AssistChipDefaults.elevatedAssistChipColors(containerColor = ColorGenderDark, labelColor = Color.White)
                         )
                         if (exam.getScoreTexts()[score].isNotBlank()) {
