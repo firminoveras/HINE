@@ -56,7 +56,8 @@ import com.firmino.hinedigital.view.theme.fontTulpen
 import com.firmino.hinedigital.view.theme.fontZenDots
 import com.firmino.hinedigital.view.theme.getColorTheme
 import com.firmino.hinedigital.view.theme.toggleTheme
-import com.firmino.hinedigital.view.views.DialogDevNotes
+import com.firmino.hinedigital.view.views.DialogDeveloperNotes
+import com.firmino.hinedigital.view.views.DialogLicencesNotes
 import java.util.Locale
 
 class MenuActivity : ComponentActivity() {
@@ -67,11 +68,14 @@ class MenuActivity : ComponentActivity() {
             var theme by remember { mutableStateOf(getColorTheme(this@MenuActivity) == ThemeGender.FEMALE) }
             HINEDigitalTheme {
 
-                var infoDialogVisible by remember { mutableStateOf(false) }
-                if (infoDialogVisible) DialogDevNotes(onDismiss = { infoDialogVisible = false }) {
+                var dialogDeveloperVisible by remember { mutableStateOf(false) }
+                var dialogLicencesVisible by remember { mutableStateOf(false) }
+
+                if (dialogDeveloperVisible) DialogDeveloperNotes(onDismiss = { dialogDeveloperVisible = false }) {
                     val url = "https://github.com/firminoveras"
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
+                if (dialogLicencesVisible) DialogLicencesNotes(onDismiss = { dialogLicencesVisible = false })
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     key(theme) {
@@ -88,15 +92,20 @@ class MenuActivity : ComponentActivity() {
                                     Spacer(modifier = Modifier.height(18.dp))
                                     Menu()
 
-                                    Column(
+                                    Row(
                                         Modifier
                                             .fillMaxSize()
-                                            .padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Bottom), horizontalAlignment = Alignment.End
+                                            .padding(12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End), verticalAlignment = Alignment.Bottom
                                     ) {
                                         IconButton(
                                             colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
-                                            onClick = { infoDialogVisible = true }) {
-                                            Icon(ImageVector.vectorResource(id = R.drawable.ic_dev_comment), contentDescription = null, tint = ColorGenderDark)
+                                            onClick = { dialogDeveloperVisible = true }) {
+                                            Icon(ImageVector.vectorResource(id = R.drawable.ic_info), contentDescription = null, tint = ColorGenderDark)
+                                        }
+                                        IconButton(
+                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
+                                            onClick = { dialogLicencesVisible = true }) {
+                                            Icon(ImageVector.vectorResource(id = R.drawable.ic_policy), contentDescription = null, tint = ColorGenderDark)
                                         }
                                         IconButton(
                                             colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
@@ -107,11 +116,6 @@ class MenuActivity : ComponentActivity() {
                                 }
                             }
 
-                            Text(
-                                text = packageManager.getPackageInfo(packageName, 0).versionName ?: "Versão de Teste", fontSize = 12.sp, color = Color.White, modifier = Modifier
-                                    .align(Alignment.BottomStart)
-                                    .padding(12.dp)
-                            )
                         }
                     }
                 }
@@ -142,8 +146,8 @@ class MenuActivity : ComponentActivity() {
 
     @Composable
     fun Logo() {
-        Column {
-            Row(Modifier.padding(start = 32.dp), verticalAlignment = Alignment.Bottom) {
+        Box(Modifier.padding(start = 32.dp)) {
+            Row(verticalAlignment = Alignment.Bottom) {
                 Text(text = "HINE", fontFamily = fontZenDots, color = Color.White, fontSize = 80.sp)
                 Text(
                     modifier = Modifier.offset(y = (-12).dp),
@@ -153,8 +157,8 @@ class MenuActivity : ComponentActivity() {
                     fontSize = 40.sp,
                 )
             }
+            Text(text = packageManager.getPackageInfo(packageName, 0).versionName ?: "Versão de Teste", fontSize = 12.sp, color = Color.White, modifier = Modifier.align(Alignment.BottomStart))
         }
-
     }
 
     @Composable

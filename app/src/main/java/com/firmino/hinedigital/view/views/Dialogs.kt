@@ -222,24 +222,39 @@ fun DialogConfirm(
 }
 
 @Composable
-fun DialogDevNotes(onDismiss: () -> Unit = {}, onClick: () -> Unit = {}) {
+fun DialogLicencesNotes(onDismiss: () -> Unit = {}) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
             Column(Modifier.padding(24.dp)) {
-                Icon(modifier = Modifier.fillMaxWidth(), imageVector = ImageVector.vectorResource(R.drawable.ic_dev_comment), contentDescription = null, tint = ColorGenderDark)
+                Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_policy), contentDescription = null, tint = ColorGenderDark, modifier = Modifier.align(Alignment.CenterHorizontally))
                 Spacer(Modifier.height(16.dp))
-                Text(modifier = Modifier.fillMaxWidth(), text = "Notas do Desenvolvedor", style = MaterialTheme.typography.titleLarge, color = ColorGenderDarker)
+                Text(text = "Licenças e Bibliotecas", style = MaterialTheme.typography.titleLarge, modifier = Modifier.align(Alignment.CenterHorizontally))
                 Spacer(Modifier.height(16.dp))
-                Text(text = "Licenças e Bibliotecas", style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Justify, color = ColorGenderDarker)
-                Spacer(Modifier.height(8.dp))
                 Text(text = "Apache PDFBox® - A Java PDF Library", style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Justify, color = ColorGenderDarker)
                 Text(text = "Apache PDFBox is published under the Apache License v2.0.", style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Justify, color = ColorGenderDarker)
                 Spacer(Modifier.height(8.dp))
                 Text(text = "Material Design Icons", style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Justify, color = ColorGenderDarker)
                 Text(text = "Material Design Icons is published under the Apache License v2.0.", style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Justify, color = ColorGenderDarker)
                 Spacer(Modifier.height(16.dp))
-                Text(text = "Desenvolvedores", style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Justify, color = ColorGenderDarker)
-                Spacer(Modifier.height(8.dp))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    TextButton(onClick = { onDismiss() }) {
+                        Text("Fechar", color = ColorGenderDark)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DialogDeveloperNotes(onDismiss: () -> Unit = {}, onClick: () -> Unit = {}) {
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
+            Column(Modifier.padding(24.dp)) {
+                Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_info), contentDescription = null, tint = ColorGenderDark, modifier = Modifier.align(Alignment.CenterHorizontally))
+                Spacer(Modifier.height(16.dp))
+                Text(text = "Desenvolvedores", style = MaterialTheme.typography.titleLarge, modifier = Modifier.align(Alignment.CenterHorizontally))
+                Spacer(Modifier.height(16.dp))
                 Text(text = "Halbiege Léa Di Pace Quirino Da Silva", style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Justify, color = ColorGenderDarker)
                 Text(text = "Mestranda", style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Justify, color = ColorGenderDarker)
                 Spacer(Modifier.height(8.dp))
@@ -257,7 +272,6 @@ fun DialogDevNotes(onDismiss: () -> Unit = {}, onClick: () -> Unit = {}) {
                     Spacer(Modifier.width(24.dp))
                     Text("Página do Desenvolvedor")
                 }
-                Spacer(Modifier.height(24.dp))
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     TextButton(onClick = { onDismiss() }) {
                         Text("Fechar", color = ColorGenderDark)
@@ -408,7 +422,7 @@ fun DatePickerModal(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text("Cancelar")
             }
         }
     ) {
@@ -424,7 +438,7 @@ fun CreateConfirmDialog(
     AlertDialog(
         onDismissRequest = { onDismiss() },
         confirmButton = {
-            TextButton(onClick = {onConfirm()}) {
+            TextButton(onClick = { onConfirm() }) {
                 Text(text = "Confirmar")
             }
         },
