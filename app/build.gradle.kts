@@ -15,7 +15,6 @@ android {
         targetSdk = 35
         versionCode = 23
         versionName = "Versão 0.2.3 - Beta"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -77,13 +76,6 @@ dependencies {
 
     //Material
     implementation(libs.androidx.material3)
-
-    // Test
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
 
     // Debug
     debugImplementation(libs.androidx.ui.tooling)

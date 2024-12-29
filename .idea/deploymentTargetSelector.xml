@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-07-12T18:06:07.015939997Z">
+        <DropdownSelection timestamp="2024-12-29T18:12:21.038927143Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/home/firmino/.android/avd/Pixel_8_API_34.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/firmino/.android/avd/Medium_Phone.avd" />
             </handle>
           </Target>
         </DropdownSelection>

@@ -374,7 +374,7 @@ class ExamActivity : ComponentActivity() {
                             .clip(shape = RoundedCornerShape(32.dp)),
                     )
 
-                    if(image2Id != null && !imageAlt){
+                    if (image2Id != null && !imageAlt) {
                         Image(
                             painter = painterResource(id = image2Id), contentDescription = null,
                             modifier = Modifier

@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -37,7 +36,6 @@ import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -120,7 +118,6 @@ class NewEvaluationActivity : ComponentActivity() {
     }
 
     @Composable
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
     private fun Content(genderTheme: Boolean, onThemeChange: (newTheme: Boolean) -> Unit = {}) {
         var name by remember { mutableStateOf("") }
         var gender by remember { mutableStateOf(if (getColorTheme(this@NewEvaluationActivity) == ThemeGender.FEMALE) "feminino" else "masculino") }
@@ -259,7 +256,6 @@ class NewEvaluationActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun PageNavigation(pageStatus: List<Boolean>, state: PagerState, onNavigate: (newPage: Int) -> Unit) {
 

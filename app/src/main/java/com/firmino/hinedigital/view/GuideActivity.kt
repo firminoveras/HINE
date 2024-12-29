@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -70,7 +69,6 @@ import com.firmino.hinedigital.view.theme.toggleTheme
 import kotlinx.coroutines.launch
 
 class GuideActivity : ComponentActivity() {
-    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -112,7 +110,6 @@ class GuideActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun PageNavigation(modifier: Modifier = Modifier, state: PagerState, onThemeChange: () -> Unit = {}, onScalePlus: () -> Unit = {}, onScaleMinus: () -> Unit = {}, onNavigate: (newPage: Int) -> Unit) {
         Column(modifier.height(120.dp), horizontalAlignment = Alignment.CenterHorizontally) {

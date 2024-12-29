@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.firmino.hinedigital.R
 
@@ -28,7 +29,7 @@ import com.firmino.hinedigital.R
 @Composable
 fun BallsAnim(modifier: Modifier = Modifier) {
     val displayMetrics = LocalContext.current.resources.displayMetrics
-    val size = ((displayMetrics.heightPixels.toFloat() /3) / displayMetrics.density)
+    val size = ((displayMetrics.heightPixels.toFloat() / 3) / displayMetrics.density)
 
     val scale1 = remember { Animatable(1.6f) }
     val scale2 = remember { Animatable(1.7f) }
@@ -64,14 +65,16 @@ fun BallsAnim(modifier: Modifier = Modifier) {
         )
     }
 
-    Box(modifier.alpha(.8f).fillMaxWidth()) {
+    Box(modifier
+        .alpha(.8f)
+        .fillMaxWidth()) {
         Image(
             painterResource(id = R.drawable.bg_circle_filled),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .size(size.dp)
-                .offset(x = (size / (3 * scale1.value)).dp, y = -(size / 2).dp)
+                .offset { IntOffset(x = (size / (3 * scale1.value)).dp.toPx().toInt(), y = -(size / 2).dp.toPx().toInt()) }
                 .scale(scale1.value),
         )
 
@@ -81,7 +84,7 @@ fun BallsAnim(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .size(size.dp)
-                .offset(x = (size / (3 * scale2.value)).dp, y = -(size / 1.7f).dp)
+                .offset { IntOffset(x = (size / (3 * scale2.value)).dp.toPx().toInt(), y = -(size / 1.7f).dp.toPx().toInt()) }
                 .scale(scale2.value),
         )
 
@@ -91,7 +94,7 @@ fun BallsAnim(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .size(size.dp)
-                .offset(x = -(size / (9 * scale3.value)).dp, y = -(size / 1.5f).dp)
+                .offset { IntOffset(x = -(size / (9 * scale3.value)).dp.toPx().toInt(), y = -(size / 1.5f).dp.toPx().toInt()) }
                 .scale(scale3.value),
         )
 
@@ -103,7 +106,7 @@ fun BallsAnim(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopEnd)
-                .size((size/1.4f).dp)
+                .size((size / 1.4f).dp)
                 .padding(16.dp)
         )
     }

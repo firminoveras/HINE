@@ -72,7 +72,6 @@ import com.firmino.hinedigital.view.theme.ColorGenderLight
 import com.firmino.hinedigital.view.theme.ColorPinkDark
 import kotlin.math.min
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditDialog(evaluation: Evaluation, onDismiss: () -> Unit = {}, onConfirm: (evaluation: Evaluation) -> Unit = {}) {
     var name by remember { mutableStateOf(evaluation.name) }

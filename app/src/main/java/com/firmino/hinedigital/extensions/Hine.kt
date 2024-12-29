@@ -1,9 +1,7 @@
 package com.firmino.hinedigital.extensions
 
 import com.firmino.hinedigital.R
-import com.firmino.hinedigital.view.ExamActivity
 import com.firmino.hinedigital.view.theme.ThemeGender
-import com.firmino.hinedigital.view.theme.getColorTheme
 
 data class Exam(
     val title: String = "",
@@ -23,8 +21,8 @@ data class Exam(
     val imageId0: Triple<Pair<Int?, Int?>, Pair<Int?, Int?>?, Int?> = Triple(Pair(null, null), null, null),
     val maxScore: Int = 3,
 ) {
+    private fun getImages(score: Int) = listOf(imageId0, imageId1, imageId2, imageId3, imageId4, imageId5)[score]
     fun getScoreTexts() = listOf(textScore0, textScore1, textScore2, textScore3, textScore4, textScore5)
-    fun getImages(score: Int) = listOf(imageId0, imageId1, imageId2, imageId3, imageId4, imageId5)[score]
     fun getFirstImage(score: Int, theme: ThemeGender) = if (theme == ThemeGender.FEMALE) getImages(score).first.first else getImages(score).first.second
     fun getSecondImage(score: Int, theme: ThemeGender) = if (getImages(score).second != null) if (theme == ThemeGender.FEMALE) getImages(score).second!!.first else getImages(score).second!!.second else null
     fun getAltImage(score: Int) = getImages(score).third
