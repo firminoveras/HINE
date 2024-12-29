@@ -85,7 +85,6 @@ import com.firmino.hinedigital.view.theme.ColorGenderDark
 import com.firmino.hinedigital.view.theme.ColorGenderDarker
 import com.firmino.hinedigital.view.theme.ColorGenderLight
 import com.firmino.hinedigital.view.theme.HINEDigitalTheme
-import com.firmino.hinedigital.view.theme.ThemeGender
 import com.firmino.hinedigital.view.theme.getColorTheme
 import com.firmino.hinedigital.view.views.DialogTutorial
 import com.firmino.hinedigital.viewmodel.EvaluationViewModel
@@ -341,6 +340,14 @@ class ExamActivity : ComponentActivity() {
 
     @Composable
     private fun ExamImage(width: Int, exam: Exam, score: Int) {
+        val image1Id = exam.getFirstImage(score, getColorTheme(this@ExamActivity))
+        val image2Id = exam.getSecondImage(score, getColorTheme(this@ExamActivity))
+        val imageAltId = exam.getAltImage(score)
+
+        var scoreTextExtended by remember(key1 = score, key2 = exam) { mutableStateOf(image1Id == null) }
+
+        var imageAlt by remember { mutableStateOf(false) }
+        imageAlt = false
 
         val alpha = remember { Animatable(0f) }
         LaunchedEffect(true) {
@@ -353,57 +360,12 @@ class ExamActivity : ComponentActivity() {
             )
         }
 
-        val imageId = when (score) {
-            0 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId0.first.first else exam.imageId0.first.second
-            1 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId1.first.first else exam.imageId1.first.second
-            2 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId2.first.first else exam.imageId2.first.second
-            3 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId3.first.first else exam.imageId3.first.second
-            4 -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId4.first.first else exam.imageId4.first.second
-            else -> if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId5.first.first else exam.imageId5.first.second
-        }
-        val image2Id = when (score) {
-            0 -> if (exam.imageId0.second != null) {
-                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId0.second!!.first else exam.imageId0.second!!.second
-            } else null
-
-            1 -> if (exam.imageId1.second != null) {
-                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId1.second!!.first else exam.imageId1.second!!.second
-            } else null
-
-            2 -> if (exam.imageId2.second != null) {
-                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId2.second!!.first else exam.imageId2.second!!.second
-            } else null
-
-            3 -> if (exam.imageId3.second != null) {
-                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId3.second!!.first else exam.imageId3.second!!.second
-            } else null
-
-            4 -> if (exam.imageId4.second != null) {
-                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId4.second!!.first else exam.imageId4.second!!.second
-            } else null
-
-            else -> if (exam.imageId5.second != null) {
-                if (getColorTheme(this@ExamActivity) == ThemeGender.FEMALE) exam.imageId5.second!!.first else exam.imageId5.second!!.second
-            } else null
-        }
-
-        val imageAltId = when (score) {
-            0 -> exam.imageId0.third
-            1 -> exam.imageId1.third
-            2 -> exam.imageId2.third
-            3 -> exam.imageId3.third
-            4 -> exam.imageId4.third
-            else -> exam.imageId5.third
-        }
-        var scoreTextExtended by remember(key1 = score, key2 = exam) { mutableStateOf(imageId == null) }
-        var imageAlt by remember { mutableStateOf(false) }
-        imageAlt = false
         ElevatedCard(shape = RoundedCornerShape(32.dp)) {
             Box(Modifier.size((width / 1.2f).dp)) {
                 Image(painter = painterResource(id = R.drawable.bg_babybox), contentDescription = null, modifier = Modifier.fillMaxSize())
-                if (imageId != null) {
+                if (image1Id != null) {
                     Image(
-                        painter = painterResource(id = if (imageAltId != null && imageAlt) imageAltId else imageId), contentDescription = null,
+                        painter = painterResource(id = if (imageAltId != null && imageAlt) imageAltId else image1Id), contentDescription = null,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(18.dp)
