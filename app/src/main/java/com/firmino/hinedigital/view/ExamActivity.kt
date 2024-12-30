@@ -31,19 +31,18 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
-import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -53,11 +52,7 @@ import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -71,6 +66,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -96,6 +92,7 @@ import com.firmino.hinedigital.view.theme.ColorGenderLight
 import com.firmino.hinedigital.view.theme.HINEDigitalTheme
 import com.firmino.hinedigital.view.theme.getColorTheme
 import com.firmino.hinedigital.view.views.DialogTutorial
+import com.firmino.hinedigital.view.views.EditTextDialog
 import com.firmino.hinedigital.viewmodel.EvaluationViewModel
 import com.firmino.hinedigital.viewmodel.factory.EvaluationModelViewFactory
 import kotlin.math.min
@@ -169,164 +166,140 @@ class ExamActivity : ComponentActivity() {
         val width = min(LocalConfiguration.current.screenWidthDp, LocalConfiguration.current.screenHeightDp) - 36
         val observationText = evaluationModel.comments[evaluationIndex][examIndex]
         val asymmetryText = evaluationModel.asymmetriesComments[evaluationIndex][examIndex]
-        val hasAsymmetry = evaluationModel.asymmetries[evaluationIndex][examIndex] == 1
-
-        var commentsVisible by remember(evaluationModel) { mutableStateOf(false) }
 
         Box(Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ExamImage(width, exam, evaluationModel.scores[evaluationIndex][examIndex])
-                Spacer(Modifier.height(12.dp))
                 ExamScale(exam, evaluationModel.scores[evaluationIndex][examIndex]) {
                     val copyScores = evaluationModel.scores.toMutableList()
                     copyScores[evaluationIndex][examIndex] = it
                     onEvaluationUpdate(evaluationModel.copy(scores = copyScores))
                 }
-            }
-            CommentCard(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                observationText = observationText,
-                visible = commentsVisible,
-                asymmetryText = asymmetryText,
-                hasAsymmetry = hasAsymmetry,
-                onVisibleUpdate = { commentsVisible = it },
-            ) { comment, asymmetry, asymmetryComment ->
-                val copyComments = evaluationModel.comments.toMutableList()
-                copyComments[evaluationIndex][examIndex] = comment
-                val copyAsymmetries = evaluationModel.asymmetries.toMutableList()
-                copyAsymmetries[evaluationIndex][examIndex] = if (asymmetry) 1 else 0
-                val copyAsymmetriesComments = evaluationModel.asymmetriesComments.toMutableList()
-                copyAsymmetriesComments[evaluationIndex][examIndex] = asymmetryComment
+                Box {
+                    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        item {
+                            if (observationText.isNotBlank() || asymmetryText.isNotBlank()) {
+                                Spacer(Modifier.height(12.dp))
+                            }
+                        }
+                        item {
+                            CommentaryView(
+                                value = observationText,
+                                title = "Observações",
+                                icon = R.drawable.ic_comment,
+                                subtitle = "Adicione abaixo as observações da avaliação.",
+                                buttonText = "Nova Observação",
+                            ) {
+                                val copyComments = evaluationModel.comments.toMutableList()
+                                copyComments[evaluationIndex][examIndex] = it
+                                onEvaluationUpdate(evaluationModel.copy(comments = copyComments))
+                            }
+                        }
 
-                onEvaluationUpdate(
-                    evaluationModel.copy(
-                        comments = copyComments,
-                        asymmetries = copyAsymmetries,
-                        asymmetriesComments = copyAsymmetriesComments
+                        item {
+                            CommentaryView(
+                                value = asymmetryText,
+                                title = "Assimetrias",
+                                icon = R.drawable.ic_assymetry,
+                                subtitle = "Adicione abaixo as observações das assimetrias.",
+                                buttonText = "Nova Assimetria",
+                            ) {
+                                val copyAsymmetries = evaluationModel.asymmetries.toMutableList()
+                                copyAsymmetries[evaluationIndex][examIndex] = if (it.isNotBlank()) 1 else 0
+                                val copyAsymmetriesComments = evaluationModel.asymmetriesComments.toMutableList()
+                                copyAsymmetriesComments[evaluationIndex][examIndex] = it
+                                onEvaluationUpdate(
+                                    evaluationModel.copy(
+                                        asymmetries = copyAsymmetries,
+                                        asymmetriesComments = copyAsymmetriesComments
+                                    )
+                                )
+                            }
+                        }
+                        item { Spacer(Modifier.height(8.dp)) }
+                    }
+                    Spacer(
+                        Modifier
+                            .height(12.dp)
+                            .fillMaxWidth()
+                            .background(brush = Brush.verticalGradient(colors = listOf(ColorGenderLight, Color.Transparent)))
                     )
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun CommentaryView(
+        value: String,
+        title: String,
+        icon: Int,
+        subtitle: String,
+        buttonText: String,
+        onUpdate: (result: String) -> Unit
+    ) {
+        var editorVisible by remember { mutableStateOf(false) }
+
+        if (editorVisible) {
+            EditTextDialog(
+                title = title,
+                value = value,
+                icon = icon,
+                subtitle = subtitle,
+                onDismiss = { editorVisible = false },
+                onConfirm = {
+                    editorVisible = false
+                    onUpdate(it)
+                }
+            )
+        }
+
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp), horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (value.isNotBlank()) {
+                Column(
+                    modifier = Modifier
+                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                        .fillMaxWidth()
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Spacer(Modifier.width(48.dp))
+                        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
+                            Row(modifier = Modifier.padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Icon(ImageVector.vectorResource(icon), contentDescription = null, tint = ColorGenderDark, modifier = Modifier.size(18.dp))
+                                Text(text = title, textAlign = TextAlign.Center, color = ColorGenderDark, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
+                            }
+                            Text(
+                                modifier = Modifier
+                                    .padding(vertical = 8.dp), text = value, textAlign = TextAlign.Center, color = ColorGenderDark, style = MaterialTheme.typography.labelSmall
+                            )
+                        }
+                        IconButton(onClick = { editorVisible = true }) {
+                            Icon(Icons.Rounded.Edit, contentDescription = null, tint = ColorGenderDark)
+                        }
+                    }
+                }
+            } else {
+                ElevatedAssistChip(
+                    onClick = { editorVisible = true },
+                    label = { Text(text = buttonText, fontWeight = FontWeight.Black) },
+                    leadingIcon = { Icon(ImageVector.vectorResource(icon), contentDescription = null, tint = Color.White) },
+                    colors = AssistChipDefaults.elevatedAssistChipColors(containerColor = ColorGenderDark, labelColor = Color.White)
                 )
             }
         }
     }
 
     @Composable
-    private fun CommentCard(
-        modifier: Modifier,
-        visible: Boolean,
-        observationText: String,
-        hasAsymmetry: Boolean,
-        asymmetryText: String,
-        onVisibleUpdate: (Boolean) -> Unit,
-        onSaveClick: (comment: String, asymmetry: Boolean, asymmetryComment: String) -> Unit
-    ) {
-        var comment by remember { mutableStateOf(observationText) }
-        var asymmetry by remember { mutableStateOf(false) }
-        var asymmetryComment by remember { mutableStateOf(observationText) }
-        var saveButtonVisible by remember { mutableStateOf(false) }
-
-        comment = observationText
-        asymmetry = hasAsymmetry
-        asymmetryComment = asymmetryText
-        saveButtonVisible = false
-
-        Column(modifier = modifier) {
-            Surface(
-                modifier = Modifier.padding(horizontal = 18.dp),
-                shape = RoundedCornerShape(topEnd = 18.dp, topStart = 18.dp),
-                onClick = { onVisibleUpdate(!visible) },
-                color = ColorGenderDark
-            ) {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Icon(imageVector = if (visible) Icons.Rounded.KeyboardArrowDown else Icons.Rounded.KeyboardArrowUp, contentDescription = null, tint = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
-                    Row(modifier = Modifier.align(Alignment.Center), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_comments), contentDescription = null, tint = Color.White, modifier = Modifier.size(32.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(text = stringResource(R.string.comments), fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Bold)
-                    }
-                }
-            }
-            AnimatedVisibility(visible = visible) {
-                Column(
-                    Modifier
-                        .padding(horizontal = 18.dp)
-                        .background(color = Color.White)
-                        .fillMaxWidth()
-                        .padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(text = stringResource(R.string.obs), color = ColorGenderDark, fontWeight = FontWeight.Black)
-                    TextField(
-                        value = comment,
-                        onValueChange = {
-                            comment = it
-                            saveButtonVisible = true
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            focusedTextColor = ColorGenderDarker,
-                            unfocusedTextColor = ColorGenderDark,
-                            focusedContainerColor = ColorGenderLight,
-                            unfocusedContainerColor = ColorGenderLight,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        shape = RoundedCornerShape(12.dp),
-                    )
-
-                    Spacer(Modifier.height(12.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = stringResource(R.string.assimetrias), color = ColorGenderDark, fontWeight = FontWeight.Black)
-                        Spacer(Modifier.width(12.dp))
-                        Switch(
-                            checked = asymmetry, onCheckedChange = {
-                                asymmetry = !asymmetry
-                                saveButtonVisible = true
-                            }, colors = SwitchDefaults.colors(
-                                checkedTrackColor = ColorGenderDark
-                            )
-                        )
-                    }
-                    AnimatedVisibility(visible = asymmetry) {
-                        TextField(
-                            value = asymmetryComment,
-                            onValueChange = {
-                                asymmetryComment = it
-                                saveButtonVisible = true
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = TextFieldDefaults.colors(
-                                focusedTextColor = ColorGenderDarker,
-                                unfocusedTextColor = ColorGenderDark,
-                                focusedContainerColor = ColorGenderLight,
-                                unfocusedContainerColor = ColorGenderLight,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent
-                            ),
-                            shape = RoundedCornerShape(12.dp),
-                        )
-                    }
-                    AnimatedVisibility(visible = saveButtonVisible) {
-                        Button(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = { onSaveClick(comment, asymmetry, if (asymmetry) asymmetryComment else "") },
-                            colors = ButtonDefaults.textButtonColors(containerColor = ColorGenderDark, contentColor = Color.White)
-                        ) { Text(text = "Salvar") }
-                    }
-                }
-            }
-
-        }
-    }
-
-    @Composable
     private fun ExamScale(exam: Exam, score: Int, onScoreChange: (newScore: Int) -> Unit) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
             IconButton(
                 onClick = { if (score > 0) onScoreChange(score - 1) },
                 enabled = score > 0,
@@ -369,7 +342,7 @@ class ExamActivity : ComponentActivity() {
             )
         }
 
-        ElevatedCard(shape = RoundedCornerShape(32.dp)) {
+        ElevatedCard(shape = RoundedCornerShape(32.dp), elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)) {
             Box(Modifier.size((width / 1.2f).dp)) {
                 Image(painter = painterResource(id = R.drawable.bg_babybox), contentDescription = null, modifier = Modifier.fillMaxSize())
                 if (image1Id != null) {
@@ -588,6 +561,7 @@ class ExamActivity : ComponentActivity() {
                 Box(
                     Modifier
                         .background(color = ColorGenderDark, shape = RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                        .height((width / 8).dp)
                         .fillMaxWidth(),
                 ) {
                     Row(modifier = Modifier.align(Alignment.CenterStart), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(1.dp)) {

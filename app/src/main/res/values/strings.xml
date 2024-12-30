@@ -107,9 +107,6 @@ Prof Brigitte Vollmer
 Prof Leena Haataja</string>
     <string name="title_activity_not_implemented">NotImplementedActivity</string>
     <string name="title_activity_evaluation">EvaluationActivity</string>
-    <string name="comments">Comentários</string>
-    <string name="obs">Observações\n</string>
-    <string name="assimetrias">Assimetrias</string>
     <string name="know_more">Saiba Mais</string>
     <string name="hine_guide">GUIA HINE</string>
     <string name="hine_extend">AVALIAÇÃO NEUROLÓGICA INFANTIL DE HAMMERSMITH</string>

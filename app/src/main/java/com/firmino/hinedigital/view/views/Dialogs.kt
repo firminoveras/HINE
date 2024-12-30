@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.DateRange
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.AlertDialog
@@ -449,4 +451,72 @@ fun CreateConfirmDialog(
         title = { Text(text = stringResource(R.string.new_evaluation_title)) },
         text = { Text(text = stringResource(R.string.new_evaluation_text)) },
         icon = { Icon(Icons.Rounded.CheckCircle, contentDescription = null) })
+}
+
+@Composable
+fun EditTextDialog(
+    title: String,
+    subtitle: String,
+    icon: Int,
+    value: String,
+    onConfirm: (result: String) -> Unit = {},
+    onDismiss: () -> Unit = {},
+) {
+    var text by remember { mutableStateOf(value) }
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
+            Column(Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(imageVector = ImageVector.vectorResource(icon), contentDescription = null, tint = ColorGenderDark)
+                Spacer(Modifier.height(16.dp))
+                Text(text = title, style = MaterialTheme.typography.titleLarge)
+                if (subtitle.isNotBlank()) {
+                    Spacer(Modifier.height(16.dp))
+                    Text(text = subtitle, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
+                }
+                Spacer(Modifier.height(24.dp))
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 100.dp, max = 200.dp),
+                    value = text,
+                    onValueChange = { text = it },
+                    maxLines = 20,
+                    colors = TextFieldDefaults.colors(
+                        selectionColors = TextSelectionColors(handleColor = ColorGender, backgroundColor = ColorGenderLight),
+                        focusedTextColor = ColorGenderDarker,
+                        unfocusedTextColor = ColorGenderDark,
+                        cursorColor = ColorGender,
+                        focusedContainerColor = ColorGenderLight,
+                        unfocusedContainerColor = ColorGenderLight,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedSuffixColor = ColorGenderDark,
+                        unfocusedSuffixColor = ColorGender,
+                    ),
+                    textStyle = MaterialTheme.typography.bodySmall,
+                )
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    if (value.isNotBlank()) {
+                        TextButton(onClick = { text = value }) {
+                            Icon(ImageVector.vectorResource(R.drawable.ic_undo), contentDescription = null, tint = ColorGenderDark)
+                            Text("Desfazer", color = ColorGenderDark)
+                        }
+                    }
+                    TextButton(onClick = { text = "" }) {
+                        Icon(Icons.Rounded.Delete, contentDescription = null, tint = ColorGenderDark)
+                        Text("Limpar", color = ColorGenderDark)
+                    }
+                }
+                Spacer(Modifier.height(24.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    TextButton(onClick = { onDismiss() }) {
+                        Text("Cancelar", color = ColorGenderDark)
+                    }
+                    TextButton(onClick = { onConfirm(text.trim().replace("\n+".toRegex(), replacement = "\n")) }, colors = ButtonDefaults.textButtonColors(containerColor = ColorGenderDark, contentColor = Color.White)) {
+                        Text("Confirmar")
+                    }
+                }
+            }
+        }
+    }
 }
