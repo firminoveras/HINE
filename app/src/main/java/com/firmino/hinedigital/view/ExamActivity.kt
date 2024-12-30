@@ -604,7 +604,6 @@ class ExamActivity : ComponentActivity() {
 
     @Composable
     private fun TopBackMenu(title: String, onClick: () -> Unit = {}) {
-
         Surface(
             modifier = Modifier
                 .padding(horizontal = 18.dp),
@@ -612,7 +611,6 @@ class ExamActivity : ComponentActivity() {
             onClick = { onClick() },
             color = ColorGenderDark
         ) {
-
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -620,7 +618,7 @@ class ExamActivity : ComponentActivity() {
             ) {
                 Icon(imageVector = Icons.Rounded.Menu, contentDescription = null, tint = Color.White, modifier = Modifier.size(32.dp))
                 Spacer(Modifier.width(8.dp))
-                Text(text = title, fontSize = 16.sp, color = Color.White)
+                Text(text = title.uppercase(), fontSize = 14.sp, color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, lineHeight = 14.sp)
             }
         }
     }

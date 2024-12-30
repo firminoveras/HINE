@@ -24,8 +24,7 @@
     <string name="title_activity_evaluation_main">EvaluationMainActivity</string>
     <string name="new_evaluation_text">Você deseja confirmar as alterações feitas e criar uma avaliação nova com esses dados? Ao confirmar, você será encaminhado para a tela principal dessa avaliação.</string>
     <string name="new_evaluation_title">Criar Avaliação</string>
-    <string name="subtitle_hine">EXAME NEUROLÓGICO\nINFANTIL DE HAMMERSMITH</string>
-    <string name="hine_version">(v 20.08.20)</string>
+    <string name="subtitle_hine">EXAME NEUROLÓGICO\nINFANTIL DE HAMMERSMITH\n(v 20.08.20)</string>
     <string name="confirm">Sim</string>
     <string name="title_activity_guide">GuideActivity</string>
     <string name="guide_p1">A avaliação neurológica de Hammersmith (HINE) é relativamente curta e fácil de aprender, não depende de equipamentos caros e é aplicável em qualquer ambiente clínico. Os 26 itens são divididos em 5 seções (nervos cranianos, postura, movimentos, tônus, reflexos e reações), que podem ser facilmente marcados na ficha de avaliação o da HINE e depois pontuados. Além disso, existem 2 seções que não são pontuadas, documentando os marcos do desenvolvimento motor e a idade em que foram alcançados e um registro do comportamento da criança em termos de resposta e interação durante o exame.</string>

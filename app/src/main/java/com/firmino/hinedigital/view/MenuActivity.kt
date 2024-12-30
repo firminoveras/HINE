@@ -92,27 +92,25 @@ class MenuActivity : ComponentActivity() {
                                     Spacer(modifier = Modifier.height(18.dp))
                                     Menu()
 
-                                    Row(
-                                        Modifier
-                                            .fillMaxSize()
-                                            .padding(12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End), verticalAlignment = Alignment.Bottom
-                                    ) {
-                                        IconButton(
-                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
-                                            onClick = { dialogDeveloperVisible = true }) {
-                                            Icon(ImageVector.vectorResource(id = R.drawable.ic_info), contentDescription = null, tint = ColorGenderDark)
-                                        }
-                                        IconButton(
-                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
-                                            onClick = { dialogLicencesVisible = true }) {
-                                            Icon(ImageVector.vectorResource(id = R.drawable.ic_policy), contentDescription = null, tint = ColorGenderDark)
-                                        }
-                                        IconButton(
-                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
-                                            onClick = { theme = toggleTheme(this@MenuActivity) }) {
-                                            Icon(ImageVector.vectorResource(id = R.drawable.ic_theme), contentDescription = null, tint = ColorGenderDark)
-                                        }
-                                    }
+                                }
+                            }
+                            Column(Modifier
+                                .padding(12.dp)
+                                .align(Alignment.BottomEnd), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                IconButton(
+                                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
+                                    onClick = { dialogDeveloperVisible = true }) {
+                                    Icon(ImageVector.vectorResource(id = R.drawable.ic_info), contentDescription = null, tint = ColorGenderDark)
+                                }
+                                IconButton(
+                                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
+                                    onClick = { dialogLicencesVisible = true }) {
+                                    Icon(ImageVector.vectorResource(id = R.drawable.ic_policy), contentDescription = null, tint = ColorGenderDark)
+                                }
+                                IconButton(
+                                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
+                                    onClick = { theme = toggleTheme(this@MenuActivity) }) {
+                                    Icon(ImageVector.vectorResource(id = R.drawable.ic_theme), contentDescription = null, tint = ColorGenderDark)
                                 }
                             }
 
@@ -157,7 +155,9 @@ class MenuActivity : ComponentActivity() {
                     fontSize = 40.sp,
                 )
             }
-            Text(text = packageManager.getPackageInfo(packageName, 0).versionName ?: "Versão de Teste", fontSize = 12.sp, color = Color.White, modifier = Modifier.align(Alignment.BottomStart))
+            Text(text = packageManager.getPackageInfo(packageName, 0).versionName ?: "Versão de Teste", fontSize = 12.sp, color = Color.White, modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(start = 6.dp))
         }
     }
 
