@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
@@ -12,6 +13,8 @@ import androidx.compose.animation.core.EaseInOutSine
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +26,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -44,6 +49,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -53,6 +59,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -66,6 +73,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -73,6 +81,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.firmino.hinedigital.HINEApplication
@@ -127,8 +136,8 @@ class ExamActivity : ComponentActivity() {
                                     if (examIndex > 0) examIndex--
                                 }
                             }) {
-                                evaluationIndex = it
                                 examIndex = 0
+                                evaluationIndex = it
                             }
                             key(key) {
                                 Content(
@@ -445,16 +454,42 @@ class ExamActivity : ComponentActivity() {
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp),
+                .heightIn(min = 100.dp)
+                .fillMaxWidth(),
+
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(text = exam.subtitle, textAlign = TextAlign.Center, color = ColorGenderDarker, style = MaterialTheme.typography.labelMedium)
-            Row(modifier = Modifier.clickable { infoVisible = true }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
+            if (exam.subtitle.isNotBlank()) {
+                Spacer(Modifier.height(2.dp))
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.bg_balloon_up), contentDescription = null, modifier = Modifier
+                        .width(32.dp)
+                        .height(12.dp), contentScale = ContentScale.FillBounds
+                )
+                Column(modifier = Modifier.background(color = Color.White, shape = RoundedCornerShape(8.dp)), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp), text = exam.subtitle, textAlign = TextAlign.Center, color = ColorGenderDarker, style = MaterialTheme.typography.labelMedium)
+                    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+                        KnowMoreButton { infoVisible = true }
+                    }
+                    Spacer(Modifier.height(8.dp))
+                }
+            } else {
+                KnowMoreButton { infoVisible = true }
+            }
+        }
+    }
+
+    @Composable
+    fun KnowMoreButton(onClick: () -> Unit) {
+        Surface(
+            onClick = { onClick() },
+            color = Color.Transparent,
+            shape = RoundedCornerShape(32.dp)
+        ) {
+            Row(modifier = Modifier.padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
                 Icon(Icons.Rounded.Info, contentDescription = null, tint = ColorGenderDark, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(4.dp))
-                Text(text = stringResource(R.string.know_more), fontSize = 12.sp, color = ColorGenderDark)
+                Text(text = stringResource(R.string.know_more), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = ColorGenderDark)
             }
         }
     }
@@ -463,67 +498,131 @@ class ExamActivity : ComponentActivity() {
     private fun EvaluationList(examIndex: Int, evaluations: List<Evaluation>, onExamChangeClick: (indexDirection: Int) -> Unit, evaluationIndex: Int, onClick: (Int) -> Unit = {}) {
         val examActual = evaluations[evaluationIndex].exams[examIndex]
         val width = LocalConfiguration.current.screenWidthDp - 36
+
+        var evaluationViewToggle by remember { mutableStateOf(true) }
+
         Box(
             Modifier
                 .fillMaxWidth()
                 .padding(18.dp)
         ) {
             Column(Modifier.fillMaxWidth()) {
-                Box {
-                    Spacer(
-                        Modifier
+                AnimatedVisibility(visible = !evaluationViewToggle, enter = expandVertically(expandFrom = Alignment.Top), exit = shrinkVertically(shrinkTowards = Alignment.Top)) {
+                    Row(
+                        modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 8.dp)
-                            .height((width / 24).dp)
-                            .background(color = Color.White)
-                            .align(Alignment.Center)
-                    )
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        listOf(R.drawable.ic_evaluation1, R.drawable.ic_evaluation2, R.drawable.ic_evaluation3, R.drawable.ic_evaluation4, R.drawable.ic_evaluation5, R.drawable.ic_evaluation6, R.drawable.ic_evaluation7).forEachIndexed { i, resource ->
-                            Surface(
-                                onClick = { onClick(i) },
-                                color = if (evaluationIndex == i) ColorGenderDark else Color.White,
-                                shape = CircleShape,
-                                enabled = evaluationIndex != i
-                            ) {
-                                Image(
-                                    painterResource(resource), contentDescription = null, modifier = Modifier
-                                        .size((width / 8).dp)
-                                        .padding(8.dp)
-                                )
+                            .height((width / 8).dp), horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        listOf(
+                            R.drawable.ic_evaluation1,
+                            R.drawable.ic_evaluation2,
+                            R.drawable.ic_evaluation3,
+                            R.drawable.ic_evaluation4,
+                            R.drawable.ic_evaluation5,
+                            R.drawable.ic_evaluation6,
+                            R.drawable.ic_evaluation7,
+                        ).forEachIndexed { i, resource ->
+                            CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+                                Surface(
+                                    onClick = {
+                                        evaluationViewToggle = true
+                                        onClick(i)
+                                    },
+                                    color = if (evaluationIndex == i) ColorGenderDark else Color.White,
+                                    shape = RoundedCornerShape(topEnd = 32.dp, topStart = 32.dp),
+                                    enabled = evaluationIndex != i,
+                                ) {
+                                    Image(
+                                        painterResource(resource), contentDescription = null, modifier = Modifier
+                                            .size((width / 8).dp)
+                                            .padding(8.dp)
+                                    )
+                                }
                             }
                         }
                     }
                 }
-                Spacer(Modifier.height((width / 16).dp))
-                Row(
-                    Modifier
-                        .background(color = ColorGenderDark, shape = RoundedCornerShape(32.dp))
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    IconButton(modifier = Modifier.alpha(if (examIndex > 0) 1f else 0f), onClick = { onExamChangeClick(-1) }) {
-                        Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null, tint = Color.White)
-                    }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                        Text(text = evaluationsList[evaluationIndex].title.uppercase(), fontSize = 14.sp, color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, lineHeight = 14.sp)
-                        Text(text = examActual.title, fontSize = 12.sp, color = Color.White, textAlign = TextAlign.Center, lineHeight = 12.sp)
-                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
-                            (0..<evaluations[evaluationIndex].exams.size).forEach {
+                AnimatedVisibility(visible = evaluationViewToggle, enter = expandVertically(expandFrom = Alignment.Bottom), exit = shrinkVertically(shrinkTowards = Alignment.Bottom)) {
+                    Box(
+                        Modifier
+                            .background(color = Color.White, shape = RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp))
+                            .fillMaxWidth()
+                            .height((width / 8).dp)
+                            .clickable { evaluationViewToggle = false },
+                    ) {
+                        Row(modifier = Modifier.align(Alignment.CenterStart), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+                            IconButton(modifier = Modifier.alpha(if (evaluationIndex > 0) 1f else 0f), onClick = { if (evaluationIndex > 0) onClick(evaluationIndex - 1) }) {
+                                Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null, tint = ColorGenderDark)
+                            }
+                            repeat(evaluationIndex) {
                                 Spacer(
                                     modifier = Modifier
-                                        .size((if (it == examIndex) 8 else 6).dp)
-                                        .background(color = if (it == examIndex) ColorGenderLight else ColorGenderDarker, shape = CircleShape)
+                                        .size(3.dp)
+                                        .offset(x = (-22).dp)
+                                        .background(color = ColorGenderDark, shape = CircleShape)
                                 )
                             }
                         }
-                    }
-                    IconButton(modifier = Modifier.alpha(if (examIndex < evaluations[evaluationIndex].exams.size - 1) 1f else 0f), onClick = { onExamChangeClick(1) }) {
-                        Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null, tint = Color.White)
+                        Row(modifier = Modifier.align(Alignment.CenterEnd), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+                            repeat(evaluations.size - 1 - evaluationIndex) {
+                                Spacer(
+                                    modifier = Modifier
+                                        .size(3.dp)
+                                        .offset(x = 22.dp)
+                                        .background(color = ColorGenderDark, shape = CircleShape)
+                                )
+                            }
+                            IconButton(modifier = Modifier.alpha(if (evaluationIndex < evaluations.size - 1) 1f else 0f), onClick = { if (evaluationIndex < evaluations.size - 1) onClick(evaluationIndex + 1) }) {
+                                Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null, tint = ColorGenderDark)
+                            }
+                        }
+                        AnimatedContent(modifier = Modifier.align(Alignment.Center), targetState = evaluationIndex, contentAlignment = Alignment.Center) { target ->
+                            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                                Text(text = "Avaliação ${target + 1}", fontSize = 12.sp, color = ColorGenderDark, textAlign = TextAlign.Center, lineHeight = 12.sp)
+                                Text(text = evaluationsList[target].title, fontSize = 14.sp, color = ColorGenderDark, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, lineHeight = 14.sp)
+                            }
+                        }
                     }
                 }
-                Spacer(Modifier.height(16.dp))
+
+                Box(
+                    Modifier
+                        .background(color = ColorGenderDark, shape = RoundedCornerShape(bottomEnd = 16.dp, bottomStart = 16.dp))
+                        .fillMaxWidth(),
+                ) {
+                    Row(modifier = Modifier.align(Alignment.CenterStart), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+                        IconButton(modifier = Modifier.alpha(if (examIndex > 0) 1f else 0f), onClick = { onExamChangeClick(-1) }) {
+                            Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null, tint = Color.White)
+                        }
+                        repeat(examIndex) {
+                            Spacer(
+                                modifier = Modifier
+                                    .size(3.dp)
+                                    .offset(x = (-22).dp)
+                                    .background(color = Color.White, shape = CircleShape)
+                            )
+                        }
+                    }
+                    Row(modifier = Modifier.align(Alignment.CenterEnd), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+                        repeat(evaluations[evaluationIndex].exams.size - 1 - examIndex) {
+                            Spacer(
+                                modifier = Modifier
+                                    .size(3.dp)
+                                    .offset(x = 22.dp)
+                                    .background(color = Color.White, shape = CircleShape)
+                            )
+                        }
+                        IconButton(modifier = Modifier.alpha(if (examIndex < evaluations[evaluationIndex].exams.size - 1) 1f else 0f), onClick = { onExamChangeClick(1) }) {
+                            Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null, tint = Color.White)
+                        }
+                    }
+                    AnimatedContent(modifier = Modifier.align(Alignment.Center), targetState = examActual, contentAlignment = Alignment.Center) { target ->
+                        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                            Text(text = "Exame ${examIndex + 1}", fontSize = 12.sp, color = Color.White, textAlign = TextAlign.Center, lineHeight = 12.sp)
+                            Text(text = target.title, fontSize = 14.sp, color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, lineHeight = 14.sp)
+                        }
+                    }
+                }
                 TitleCard(examActual)
             }
         }

@@ -342,7 +342,7 @@ val evaluationsList = listOf(
         )
     ),
     Evaluation(
-        title = "Marcos Motores",
+        title = "MARCOS MOTORES",
         section = "SEÇÃO 2: MARCOS MOTORES",
         scored = false,
         exams = listOf(
@@ -432,7 +432,7 @@ val evaluationsList = listOf(
         )
     ),
     Evaluation(
-        title = "Comportamento",
+        title = "COMPORTAMENTO",
         section = "SEÇÃO 3: COMPORTAMENTO",
         scored = false,
         exams = listOf(

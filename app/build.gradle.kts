@@ -13,8 +13,8 @@ android {
         applicationId = "com.firmino.hinedigital"
         minSdk = 26
         targetSdk = 35
-        versionCode = 23
-        versionName = "Versão 0.2.3 - Beta"
+        versionCode = 24
+        versionName = "Versão 0.2.4 - Beta"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -62,7 +62,7 @@ dependencies {
     // Room
     implementation(libs.androidx.room.ktx)
     implementation(libs.room.runtime)
-    ksp (libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.gson)
 
     // Compose
