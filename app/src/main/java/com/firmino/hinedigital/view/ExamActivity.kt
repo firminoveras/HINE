@@ -37,6 +37,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Menu
@@ -74,6 +75,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -192,7 +194,7 @@ class ExamActivity : ComponentActivity() {
                                 title = "Observações",
                                 icon = R.drawable.ic_comment,
                                 subtitle = "Adicione abaixo as observações da avaliação.",
-                                buttonText = "Nova Observação",
+                                emptyText = "Nenhuma observação",
                             ) {
                                 val copyComments = evaluationModel.comments.toMutableList()
                                 copyComments[evaluationIndex][examIndex] = it
@@ -206,7 +208,7 @@ class ExamActivity : ComponentActivity() {
                                 title = "Assimetrias",
                                 icon = R.drawable.ic_assymetry,
                                 subtitle = "Adicione abaixo as observações das assimetrias.",
-                                buttonText = "Nova Assimetria",
+                                emptyText = "Nenhuma assimetria",
                             ) {
                                 val copyAsymmetries = evaluationModel.asymmetries.toMutableList()
                                 copyAsymmetries[evaluationIndex][examIndex] = if (it.isNotBlank()) 1 else 0
@@ -239,7 +241,7 @@ class ExamActivity : ComponentActivity() {
         title: String,
         icon: Int,
         subtitle: String,
-        buttonText: String,
+        emptyText: String,
         onUpdate: (result: String) -> Unit
     ) {
         var editorVisible by remember { mutableStateOf(false) }
@@ -259,40 +261,33 @@ class ExamActivity : ComponentActivity() {
         }
 
         Column(
-            Modifier
+            modifier = Modifier
+                .padding(horizontal = 18.dp)
+                .background(color = Color.White, shape = RoundedCornerShape(8.dp))
                 .fillMaxWidth()
-                .padding(horizontal = 18.dp), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (value.isNotBlank()) {
-                Column(
-                    modifier = Modifier
-                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-                        .fillMaxWidth()
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Spacer(Modifier.width(48.dp))
-                        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
-                            Row(modifier = Modifier.padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Icon(ImageVector.vectorResource(icon), contentDescription = null, tint = ColorGenderDark, modifier = Modifier.size(18.dp))
-                                Text(text = title, textAlign = TextAlign.Center, color = ColorGenderDark, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
-                            }
-                            Text(
-                                modifier = Modifier
-                                    .padding(vertical = 8.dp), text = value, textAlign = TextAlign.Center, color = ColorGenderDark, style = MaterialTheme.typography.labelSmall
-                            )
-                        }
-                        IconButton(onClick = { editorVisible = true }) {
-                            Icon(Icons.Rounded.Edit, contentDescription = null, tint = ColorGenderDark)
-                        }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Spacer(Modifier.width(48.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
+                    Row(modifier = Modifier.padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(ImageVector.vectorResource(icon), contentDescription = null, tint = ColorGenderDark, modifier = Modifier.size(18.dp))
+                        Text(text = title, textAlign = TextAlign.Center, color = ColorGenderDark, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
+                    }
+                    if (value.isNotBlank()) {
+                        Text(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp), text = value, textAlign = TextAlign.Center, color = ColorGenderDark, style = MaterialTheme.typography.labelSmall
+                        )
+                    } else {
+                        Text(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp), text = emptyText, textAlign = TextAlign.Center, color = ColorGender, fontStyle = FontStyle.Italic, style = MaterialTheme.typography.labelSmall
+                        )
                     }
                 }
-            } else {
-                ElevatedAssistChip(
-                    onClick = { editorVisible = true },
-                    label = { Text(text = buttonText, fontWeight = FontWeight.Black) },
-                    leadingIcon = { Icon(ImageVector.vectorResource(icon), contentDescription = null, tint = Color.White) },
-                    colors = AssistChipDefaults.elevatedAssistChipColors(containerColor = ColorGenderDark, labelColor = Color.White)
-                )
+                IconButton(onClick = { editorVisible = true }) {
+                    Icon(if (value.isNotBlank()) Icons.Rounded.Edit else Icons.Rounded.Add, contentDescription = null, tint = ColorGenderDark)
+                }
             }
         }
     }
