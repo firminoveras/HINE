@@ -35,10 +35,20 @@ data class Evaluation(
     val exams: List<Exam>,
 )
 
+val evaluationsImages = listOf(
+    R.drawable.ic_evaluation1,
+    R.drawable.ic_evaluation2,
+    R.drawable.ic_evaluation3,
+    R.drawable.ic_evaluation4,
+    R.drawable.ic_evaluation5,
+    R.drawable.ic_evaluation6,
+    R.drawable.ic_evaluation7,
+)
+
 val evaluationsList = listOf(
     Evaluation(
-        title = "FUNÇÃO DOS NERVOS CRANIANOS",
-        section = "SEÇÃO 1: EXAME NEUROLÓGICO",
+        title = "Função dos Nervos Cranianos",
+        section = "Seção 1: Exame Neurológico",
         exams = listOf(
             Exam(
                 title = "Aparência Facial",
@@ -88,8 +98,8 @@ val evaluationsList = listOf(
     ),
 
     Evaluation(
-        title = "POSTURA",
-        section = "SEÇÃO 1: EXAME NEUROLÓGICO",
+        title = "Postura",
+        section = "Seção 1: Exame Neurológico",
         exams = listOf(
             Exam(
                 title = "Cabeça",
@@ -160,8 +170,8 @@ val evaluationsList = listOf(
     ),
 
     Evaluation(
-        title = "MOVIMENTOS",
-        section = "SEÇÃO 1: EXAME NEUROLÓGICO",
+        title = "Movimentos",
+        section = "Seção 1: Exame Neurológico",
         exams = listOf(
             Exam(
                 title = "Quantidade",
@@ -185,8 +195,8 @@ val evaluationsList = listOf(
     ),
 
     Evaluation(
-        title = "TÔNUS",
-        section = "SEÇÃO 1: EXAME NEUROLÓGICO",
+        title = "Tônus",
+        section = "Seção 1: Exame Neurológico",
         exams = listOf(
             Exam(
                 title = "Sinal do cachecol",
@@ -283,8 +293,8 @@ val evaluationsList = listOf(
     ),
 
     Evaluation(
-        title = "REFLEXOS E REAÇÕES",
-        section = "SEÇÃO 1: EXAME NEUROLÓGICO",
+        title = "Reflexos e Reações",
+        section = "Seção 1: Exame Neurológico",
         exams = listOf(
             Exam(
                 title = "Proteção do braço",
@@ -342,8 +352,8 @@ val evaluationsList = listOf(
         )
     ),
     Evaluation(
-        title = "MARCOS MOTORES",
-        section = "SEÇÃO 2: MARCOS MOTORES",
+        title = "Marcos Motores",
+        section = "Seção 2: Marcos Motores",
         scored = false,
         exams = listOf(
             Exam(
@@ -432,8 +442,8 @@ val evaluationsList = listOf(
         )
     ),
     Evaluation(
-        title = "COMPORTAMENTO",
-        section = "SEÇÃO 3: COMPORTAMENTO",
+        title = "Comportamento",
+        section = "Seção 3: Comportamento",
         scored = false,
         exams = listOf(
             Exam(

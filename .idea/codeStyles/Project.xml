@@ -1,6 +1,10 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
+    <ComposeCustomCodeStyleSettings>
+      <option name="USE_CUSTOM_FORMATTING_FOR_MODIFIERS" value="false" />
+    </ComposeCustomCodeStyleSettings>
     <JetCodeStyleSettings>
+      <option name="WRAP_EXPRESSION_BODY_FUNCTIONS" value="0" />
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
     <codeStyleSettings language="JAVA">
@@ -124,7 +128,8 @@
     </codeStyleSettings>
     <codeStyleSettings language="kotlin">
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
-      <option name="RIGHT_MARGIN" value="300" />
+      <option name="RIGHT_MARGIN" value="400" />
+      <option name="METHOD_CALL_CHAIN_WRAP" value="0" />
       <option name="WRAP_ON_TYPING" value="1" />
     </codeStyleSettings>
   </code_scheme>

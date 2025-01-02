@@ -258,7 +258,6 @@ class NewEvaluationActivity : ComponentActivity() {
 
     @Composable
     fun PageNavigation(pageStatus: List<Boolean>, state: PagerState, onNavigate: (newPage: Int) -> Unit) {
-
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
             Surface(
                 modifier = Modifier.alpha(if (state.currentPage == 0) 0f else 1f),
@@ -268,18 +267,18 @@ class NewEvaluationActivity : ComponentActivity() {
                 contentColor = ColorGenderDark,
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null, modifier = Modifier
-                        .padding(8.dp)
-                        .size(38.dp)
+                    modifier = Modifier.padding(8.dp).size(38.dp),
+                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
+                    contentDescription = null
                 )
             }
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
                 repeat(state.pageCount) { page ->
                     Icon(
+                        modifier = Modifier.size(if (page == state.currentPage) 20.dp else 12.dp),
                         imageVector = ImageVector.vectorResource(id = if (pageStatus[page]) R.drawable.ic_done_on else R.drawable.ic_done_off),
                         contentDescription = null,
-                        tint = if (page == state.currentPage) ColorGenderLight else ColorGenderDarker,
-                        modifier = Modifier.size(if (page == state.currentPage) 20.dp else 12.dp)
+                        tint = if (page == state.currentPage) ColorGenderLight else ColorGenderDarker
                     )
                 }
             }
@@ -291,9 +290,9 @@ class NewEvaluationActivity : ComponentActivity() {
                 contentColor = ColorGenderDark,
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null, modifier = Modifier
-                        .padding(8.dp)
-                        .size(38.dp)
+                    modifier = Modifier.padding(8.dp).size(38.dp),
+                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                    contentDescription = null
                 )
             }
         }
@@ -445,5 +444,4 @@ class NewEvaluationActivity : ComponentActivity() {
             shape = RoundedCornerShape(32.dp)
         )
     }
-
 }

@@ -91,12 +91,13 @@ class MenuActivity : ComponentActivity() {
                                     Logo()
                                     Spacer(modifier = Modifier.height(18.dp))
                                     Menu()
-
                                 }
                             }
-                            Column(Modifier
-                                .padding(12.dp)
-                                .align(Alignment.BottomEnd), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Column(
+                                Modifier
+                                    .padding(12.dp)
+                                    .align(Alignment.BottomEnd), verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
                                 IconButton(
                                     colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White),
                                     onClick = { dialogDeveloperVisible = true }) {
@@ -113,14 +114,12 @@ class MenuActivity : ComponentActivity() {
                                     Icon(ImageVector.vectorResource(id = R.drawable.ic_theme), contentDescription = null, tint = ColorGenderDark)
                                 }
                             }
-
                         }
                     }
                 }
             }
         }
     }
-
 
     @Composable
     fun Menu() {
@@ -155,9 +154,12 @@ class MenuActivity : ComponentActivity() {
                     fontSize = 40.sp,
                 )
             }
-            Text(text = packageManager.getPackageInfo(packageName, 0).versionName ?: "Versão de Teste", fontSize = 12.sp, color = Color.White, modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 6.dp))
+            Text(
+                modifier = Modifier.align(Alignment.BottomStart).padding(start = 6.dp),
+                text = packageManager.getPackageInfo(packageName, 0).versionName ?: "Versão de Teste",
+                fontSize = 12.sp,
+                color = Color.White
+            )
         }
     }
 
@@ -168,25 +170,19 @@ class MenuActivity : ComponentActivity() {
             shape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp),
             onClick = { onClick() }
         ) {
-            Box(
-                Modifier
-                    .clickable { onClick() }) {
+            Box(Modifier.clickable { onClick() }) {
                 Spacer(
                     modifier = Modifier
                         .width(8.dp)
                         .height(38.dp)
-                        .background(
-                            color = Color.White, RoundedCornerShape(topEnd = 6.dp, bottomEnd = 6.dp)
-                        )
+                        .background(color = Color.White, RoundedCornerShape(topEnd = 6.dp, bottomEnd = 6.dp))
                         .align(Alignment.CenterStart)
                 )
                 Text(
+                    modifier = Modifier.padding(horizontal = 38.dp).align(Alignment.CenterStart),
                     text = label.uppercase(Locale.getDefault()),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal,
-                    modifier = Modifier
-                        .padding(horizontal = 38.dp)
-                        .align(Alignment.CenterStart),
                     color = Color.White
                 )
             }
@@ -202,24 +198,20 @@ class MenuActivity : ComponentActivity() {
         ) {
             Row(Modifier.padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(
+                    modifier = Modifier.padding(horizontal = 32.dp),
                     text = label.uppercase(Locale.getDefault()),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 32.dp),
                     color = ColorGenderDark,
                     overflow = TextOverflow.Ellipsis
                 )
                 Icon(
+                    modifier = Modifier.background(ColorGenderDark, CircleShape).size(32.dp),
                     imageVector = icon,
                     contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier
-                        .background(ColorGenderDark, CircleShape)
-                        .size(32.dp)
+                    tint = Color.White
                 )
             }
-
-
         }
     }
 }

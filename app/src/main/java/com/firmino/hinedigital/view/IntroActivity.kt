@@ -62,19 +62,15 @@ class IntroActivity : ComponentActivity() {
                             finish()
                         }
                     }
-                    Box(modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize()) {
+                    Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
                         Column(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .fillMaxWidth(),
+                            modifier = Modifier.align(Alignment.Center).fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Image(
-                                painterResource(id = R.drawable.bg_logo),
-                                contentDescription = "Logo",
-                                modifier = Modifier.size(180.dp)
+                                modifier = Modifier.size(180.dp),
+                                painter = painterResource(id = R.drawable.bg_logo),
+                                contentDescription = "Logo"
                             )
                             Row(verticalAlignment = Alignment.Bottom) {
                                 Spacer(modifier = Modifier.width(120.dp))
@@ -90,13 +86,11 @@ class IntroActivity : ComponentActivity() {
                             Text(text = "CONEX AÇÃO", color = ColorGenderDark)
                             Spacer(modifier = Modifier.height(52.dp))
                             CircularProgressIndicator(
+                                modifier = Modifier.size(42.dp).rotate(progressValue * 360),
                                 progress = { progressValue },
-                                modifier = Modifier
-                                    .size(42.dp)
-                                    .rotate(progressValue * 360),
                                 color = MaterialTheme.colorScheme.primary,
                                 strokeWidth = 12.dp,
-                                trackColor = ColorGenderLight,
+                                trackColor = ColorGenderLight
                             )
                             Spacer(modifier = Modifier.height(52.dp))
                         }
@@ -105,11 +99,9 @@ class IntroActivity : ComponentActivity() {
                                 .align(Alignment.BottomCenter)
                                 .fillMaxWidth()
                                 .background(color = MaterialTheme.colorScheme.primary)
-                                .padding(
-                                    8.dp
-                                ), horizontalAlignment = Alignment.CenterHorizontally
+                                .padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-
                             Text(
                                 text = packageManager.getPackageInfo(packageName, 0).versionName ?: "Versão de Teste",
                                 style = MaterialTheme.typography.titleSmall,

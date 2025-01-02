@@ -2,7 +2,6 @@ package com.firmino.hinedigital.view.views
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,13 +13,10 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Delete
@@ -36,7 +32,6 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -45,7 +40,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -273,53 +267,6 @@ fun DialogDeveloperNotes(onDismiss: () -> Unit = {}, onClick: () -> Unit = {}) {
                     Spacer(Modifier.width(24.dp))
                     Text("Página do Desenvolvedor")
                 }
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    TextButton(onClick = { onDismiss() }) {
-                        Text("Fechar", color = ColorGenderDark)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun DialogTutorial(
-    title: String = "",
-    tutorial: String = "",
-    onDismiss: () -> Unit = {},
-) {
-    var index by remember { mutableIntStateOf(0) }
-    val textParagraphs = tutorial.split(". ")
-    Dialog(onDismissRequest = { onDismiss() }) {
-        Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
-            Column(Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(imageVector = Icons.Rounded.Info, contentDescription = null, tint = ColorGenderDark)
-                Spacer(Modifier.height(16.dp))
-                Text(text = title, style = MaterialTheme.typography.titleLarge, color = ColorGenderDarker)
-                Spacer(Modifier.height(8.dp))
-                if (textParagraphs.size > 1) {
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { if (index > 0) index-- }) {
-                            Icon(Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null, tint = ColorGenderDark)
-                        }
-                        Row(horizontalArrangement = Arrangement.spacedBy(3.dp), verticalAlignment = Alignment.CenterVertically) {
-                            textParagraphs.indices.forEach { i ->
-                                Spacer(
-                                    modifier = Modifier
-                                        .size((if (i == index) 8 else 6).dp)
-                                        .background(color = if (i == index) ColorGenderDarker else ColorGenderDark, shape = CircleShape)
-                                )
-                            }
-                        }
-                        IconButton(onClick = { if (index < textParagraphs.size - 1) index++ }) {
-                            Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null, tint = ColorGenderDark)
-                        }
-                    }
-                }
-                Spacer(Modifier.height(16.dp))
-                Text(text = textParagraphs[index] + ".", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify, color = ColorGenderDarker)
-                Spacer(Modifier.height(24.dp))
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     TextButton(onClick = { onDismiss() }) {
                         Text("Fechar", color = ColorGenderDark)

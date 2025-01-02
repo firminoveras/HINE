@@ -84,6 +84,7 @@ import com.firmino.hinedigital.view.theme.ColorGenderLight
 import com.firmino.hinedigital.view.theme.HINEDigitalTheme
 import com.firmino.hinedigital.view.views.DialogConfirm
 import com.firmino.hinedigital.view.views.DialogDownload
+import com.firmino.hinedigital.view.views.EditDialog
 import com.firmino.hinedigital.viewmodel.EvaluationViewModel
 import com.firmino.hinedigital.viewmodel.factory.EvaluationModelViewFactory
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
@@ -165,8 +166,7 @@ class ListEvaluationActivity : ComponentActivity() {
         }
 
         Column(
-            Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp, alignment = Alignment.Top)
         ) {
@@ -177,18 +177,21 @@ class ListEvaluationActivity : ComponentActivity() {
             } else {
                 LazyColumn(Modifier.padding(horizontal = 24.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
                     items(evaluations.filter { it.name.contains(searchText.trim(), true) || searchText.isEmpty() }, key = { it.id }) {
+                        var showDialogEdit by remember { mutableStateOf(false) }
+                        if (showDialogEdit) EditDialog(it, onDismiss = { showDialogEdit = false }, onConfirm = { newEvaluation ->
+                            showDialogEdit = false
+                            viewModel.update(newEvaluation)
+                        })
+
                         EvaluationListView(
                             evaluation = it,
-                            onDelete = {
-                                deleteId = it.id
-                            },
-                            onEdit = {
+                            onDelete = { deleteId = it.id },
+                            onEdit = { showDialogEdit = true },
+                            onDownload = { downloadId = it.id },
+                            onStart = {
                                 val intent = Intent(this@ListEvaluationActivity, EvaluationMainActivity::class.java)
                                 intent.putExtra("id", it.id)
                                 startActivity(intent)
-                            },
-                            onDownload = {
-                                downloadId = it.id
                             }
                         )
                     }
@@ -202,7 +205,6 @@ class ListEvaluationActivity : ComponentActivity() {
 
     private fun downloadEvaluationPdf(evaluation: Evaluation, context: Context, comments: String = "") {
         CoroutineScope(Dispatchers.IO).launch {
-
             try {
                 val now = LocalDateTime.now()
                 val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy - HH:mm:ss")
@@ -335,7 +337,6 @@ class ListEvaluationActivity : ComponentActivity() {
         }
     }
 
-
     @Composable
     private fun ListFooter(size: Int) {
         Column {
@@ -352,22 +353,20 @@ class ListEvaluationActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun EvaluationListView(evaluation: Evaluation, onDelete: () -> Unit = {}, onEdit: () -> Unit = {}, onDownload: () -> Unit = {}) {
+    private fun EvaluationListView(
+        evaluation: Evaluation,
+        onDelete: () -> Unit = {},
+        onEdit: () -> Unit = {},
+        onDownload: () -> Unit = {},
+        onStart: () -> Unit = {},
+    ) {
         val color = if (evaluation.gender == "feminino") Color(0xFFFDCAE1) else Color(0xFF9CE0DB)
         var extended by remember { mutableStateOf(false) }
         Column {
             Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color.White)) {
-                Column(
-                    Modifier.clickable { extended = !extended }
-                ) {
+                Column(Modifier.clickable { extended = !extended }) {
                     Row(Modifier.heightIn(max = 72.dp)) {
-                        Spacer(
-                            modifier = Modifier
-                                .width(16.dp)
-                                .weight(1f)
-                                .fillMaxHeight()
-                                .background(color = color)
-                        )
+                        Spacer(modifier = Modifier.width(16.dp).weight(1f).fillMaxHeight().background(color = color))
                         Column(
                             Modifier
                                 .padding(8.dp)
@@ -409,15 +408,13 @@ class ListEvaluationActivity : ComponentActivity() {
                                             .background(color = color)
                                     )
                                     Text(
-                                        text = s, fontSize = 14.sp, color = ColorGenderDark, modifier = Modifier
-                                            .padding(horizontal = 8.dp)
-                                            .weight(15f)
+                                        modifier = Modifier.padding(horizontal = 8.dp).weight(15f),
+                                        text = s,
+                                        fontSize = 14.sp,
+                                        color = ColorGenderDark,
                                     )
                                     Row(
-                                        Modifier
-                                            .fillMaxHeight()
-                                            .weight(4f)
-                                            .background(color = ColorGenderLight),
+                                        modifier = Modifier.fillMaxHeight().weight(4f).background(color = ColorGenderLight),
                                         horizontalArrangement = Arrangement.End,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
@@ -456,13 +453,23 @@ class ListEvaluationActivity : ComponentActivity() {
                     }
                     ElevatedButton(
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp, bottomEnd = 16.dp, bottomStart = 8.dp),
+                        shape = RoundedCornerShape(8.dp),
                         onClick = { onDownload() }, colors = ButtonDefaults.elevatedButtonColors(
                             containerColor = Color.White,
                             contentColor = ColorGenderDark
                         )
                     ) {
-                        Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_download), contentDescription = null)
+                        Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_download), contentDescription = null)
+                    }
+                    ElevatedButton(
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp, bottomEnd = 16.dp, bottomStart = 8.dp),
+                        onClick = { onStart() }, colors = ButtonDefaults.elevatedButtonColors(
+                            containerColor = Color.White,
+                            contentColor = ColorGenderDark
+                        )
+                    ) {
+                        Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_exam_start), contentDescription = null)
                     }
                 }
             }
@@ -478,9 +485,7 @@ class ListEvaluationActivity : ComponentActivity() {
     ) {
         val focusManager = LocalFocusManager.current
         TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
             value = value,
             leadingIcon = {
                 Icon(
@@ -520,6 +525,5 @@ class ListEvaluationActivity : ComponentActivity() {
             singleLine = true,
             textStyle = MaterialTheme.typography.titleMedium,
         )
-
     }
 }
