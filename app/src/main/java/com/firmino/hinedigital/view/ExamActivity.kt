@@ -371,44 +371,7 @@ class ExamActivity : ComponentActivity() {
                                     }
                                 }
                             }
-                            item {
-                                Column(
-                                    modifier = Modifier.padding(bottom = 12.dp).background(color = Color.White, shape = RoundedCornerShape(8.dp)).fillMaxWidth().padding(8.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    AnimatedVisibility(visible = !infoVisible) {
-                                        Row (horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically){
-                                            Text(
-                                                modifier = Modifier.background(color = ColorGenderDark, shape = RoundedCornerShape(4.dp)).padding(horizontal = 4.dp),
-                                                text = evaluationsList[evaluationIndex].titleSimplified.ifBlank { evaluationsList[evaluationIndex].title },
-                                                textAlign = TextAlign.Center,
-                                                fontWeight = FontWeight.Bold,
-                                                color = Color.White,
-                                                style = MaterialTheme.typography.bodySmall
-                                            )
-                                            Text(
-                                                text = ">",
-                                                fontWeight = FontWeight.Bold,
-                                                color = ColorGenderDark,
-                                                style = MaterialTheme.typography.bodySmall
-                                            )
-                                            Text(
-                                                modifier = Modifier.background(color = ColorGenderDark, shape = RoundedCornerShape(4.dp)).padding(horizontal = 4.dp),
-                                                text = evaluationsList[evaluationIndex].exams[examIndex].title,
-                                                textAlign = TextAlign.Center,
-                                                fontWeight = FontWeight.Bold,
-                                                color = Color.White,
-                                                style = MaterialTheme.typography.bodySmall
-                                            )
-                                        }
-                                    }
-                                    if(exam.subtitle.isNotBlank()){
-                                        AnimatedContent(targetState = exam.subtitle) {
-                                            Text(text = it.capitalize(Locale.current), textAlign = TextAlign.Center, color = ColorGenderDarker, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
-                                        }
-                                    }
-                                }
-                            }
+                            item { ExamSubtitle(infoVisible, evaluationIndex, examIndex, exam) }
                             items(count = exam.maxScore + 1) {
                                 ExamItem(
                                     exam = exam,
@@ -432,6 +395,49 @@ class ExamActivity : ComponentActivity() {
                 AnimatedVisibility(visible = mapVisible) {
                     ExamMap(evaluationIndex = evaluationIndex, examIndex = examIndex, expanded = mapExpanded, onExpandedUpdate = { mapExpanded = it }) { i, j -> onExamChange(i, j) }
                 }
+            }
+        }
+    }
+
+    @Composable
+    private fun ExamSubtitle(
+        infoVisible: Boolean,
+        evaluationIndex: Int,
+        examIndex: Int,
+        exam: Exam
+    ) {
+        Column(
+            modifier = Modifier.padding(bottom = 12.dp).background(color = Color.White, shape = RoundedCornerShape(8.dp)).fillMaxWidth().padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AnimatedVisibility(visible = !infoVisible) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        modifier = Modifier.background(color = ColorGenderDark, shape = RoundedCornerShape(4.dp)).padding(horizontal = 4.dp),
+                        text = evaluationsList[evaluationIndex].titleSimplified.ifBlank { evaluationsList[evaluationIndex].title },
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        text = ">",
+                        fontWeight = FontWeight.Bold,
+                        color = ColorGenderDark,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        modifier = Modifier.background(color = ColorGenderDark, shape = RoundedCornerShape(4.dp)).padding(horizontal = 4.dp),
+                        text = evaluationsList[evaluationIndex].exams[examIndex].title,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+            AnimatedContent(targetState = exam.subtitle) {
+                Text(text = it.capitalize(Locale.current).ifBlank { "Nenhuma descrição" }, textAlign = TextAlign.Center, color = ColorGenderDarker, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
             }
         }
     }
