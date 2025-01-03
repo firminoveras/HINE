@@ -13,8 +13,8 @@ android {
         applicationId = "com.firmino.hinedigital"
         minSdk = 26
         targetSdk = 35
-        versionCode = 30
-        versionName = "Versão 0.3.0 - Beta"
+        versionCode = 31
+        versionName = "Versão 0.3.1 - Beta"
         vectorDrawables {
             useSupportLibrary = true
         }

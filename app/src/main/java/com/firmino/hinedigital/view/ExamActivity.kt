@@ -255,7 +255,8 @@ class ExamActivity : ComponentActivity() {
                     )
                     listOf(
                         Triple("Nascimento", evaluation.birthday, ""),
-                        Triple("Idade Corrigida/Gestacional", "${evaluation.correctedAge}/${evaluation.gestationalWeeks}", "semanas"),
+                        Triple("Idade Gestacional", "${evaluation.gestationalWeeks}", "semanas"),
+                        Triple("Idade Corrigida", "${evaluation.correctedAge}", "semanas"),
                         Triple("Perimetro Cefálico", evaluation.cephalicSize, "cm"),
                     ).forEach {
                         Row {
@@ -268,6 +269,7 @@ class ExamActivity : ComponentActivity() {
             }
         }
     }
+
     @Composable
     private fun Content(
         evaluationModel: com.firmino.hinedigital.model.entity.Evaluation,
@@ -370,11 +372,37 @@ class ExamActivity : ComponentActivity() {
                                 }
                             }
                             item {
-                                if (exam.subtitle.isNotBlank()) {
-                                    Column(
-                                        modifier = Modifier.padding(bottom = 12.dp).background(color = Color.White, shape = RoundedCornerShape(8.dp)).fillMaxWidth().padding(8.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
+                                Column(
+                                    modifier = Modifier.padding(bottom = 12.dp).background(color = Color.White, shape = RoundedCornerShape(8.dp)).fillMaxWidth().padding(8.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    AnimatedVisibility(visible = !infoVisible) {
+                                        Row (horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically){
+                                            Text(
+                                                modifier = Modifier.background(color = ColorGenderDark, shape = RoundedCornerShape(4.dp)).padding(horizontal = 4.dp),
+                                                text = evaluationsList[evaluationIndex].titleSimplified.ifBlank { evaluationsList[evaluationIndex].title },
+                                                textAlign = TextAlign.Center,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color.White,
+                                                style = MaterialTheme.typography.bodySmall
+                                            )
+                                            Text(
+                                                text = ">",
+                                                fontWeight = FontWeight.Bold,
+                                                color = ColorGenderDark,
+                                                style = MaterialTheme.typography.bodySmall
+                                            )
+                                            Text(
+                                                modifier = Modifier.background(color = ColorGenderDark, shape = RoundedCornerShape(4.dp)).padding(horizontal = 4.dp),
+                                                text = evaluationsList[evaluationIndex].exams[examIndex].title,
+                                                textAlign = TextAlign.Center,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color.White,
+                                                style = MaterialTheme.typography.bodySmall
+                                            )
+                                        }
+                                    }
+                                    if(exam.subtitle.isNotBlank()){
                                         AnimatedContent(targetState = exam.subtitle) {
                                             Text(text = it.capitalize(Locale.current), textAlign = TextAlign.Center, color = ColorGenderDarker, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
                                         }
@@ -534,6 +562,7 @@ class ExamActivity : ComponentActivity() {
     private fun ExamTutorialView(exam: Exam) {
         var index by remember { mutableIntStateOf(0) }
         val textParagraphs = exam.tutorial.split(". ")
+        LaunchedEffect(exam) { index = 0 }
         Column(
             modifier = Modifier.padding(bottom = 12.dp).fillMaxWidth().background(color = Color.White, shape = RoundedCornerShape(8.dp)).padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -546,7 +575,9 @@ class ExamActivity : ComponentActivity() {
             }
             if (exam.tutorial.isNotBlank()) {
                 AnimatedContent(targetState = index) {
-                    Text(text = textParagraphs[it] + ".", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, color = ColorGenderDarker)
+                    if(it < textParagraphs.size){
+                        Text(text = textParagraphs[it] + ".", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, color = ColorGenderDarker)
+                    }
                 }
                 if (textParagraphs.size > 1) {
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {

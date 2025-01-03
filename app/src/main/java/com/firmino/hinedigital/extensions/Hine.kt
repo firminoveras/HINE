@@ -30,6 +30,7 @@ data class Exam(
 
 data class Evaluation(
     val title: String,
+    val titleSimplified: String = "",
     val section: String,
     val scored: Boolean = true,
     val exams: List<Exam>,
@@ -48,6 +49,7 @@ val evaluationsImages = listOf(
 val evaluationsList = listOf(
     Evaluation(
         title = "Função dos Nervos Cranianos",
+        titleSimplified = "Nervos Cranianos",
         section = "Seção 1: Exame Neurológico",
         exams = listOf(
             Exam(
