@@ -77,10 +77,12 @@ import com.firmino.hinedigital.HINEApplication
 import com.firmino.hinedigital.R
 import com.firmino.hinedigital.extensions.Header
 import com.firmino.hinedigital.model.entity.Evaluation
+import com.firmino.hinedigital.view.theme.ColorBlue
 import com.firmino.hinedigital.view.theme.ColorGender
 import com.firmino.hinedigital.view.theme.ColorGenderDark
 import com.firmino.hinedigital.view.theme.ColorGenderDarker
 import com.firmino.hinedigital.view.theme.ColorGenderLight
+import com.firmino.hinedigital.view.theme.ColorPink
 import com.firmino.hinedigital.view.theme.HINEDigitalTheme
 import com.firmino.hinedigital.view.views.DialogConfirm
 import com.firmino.hinedigital.view.views.DialogDownload
@@ -360,7 +362,7 @@ class ListEvaluationActivity : ComponentActivity() {
         onDownload: () -> Unit = {},
         onStart: () -> Unit = {},
     ) {
-        val color = if (evaluation.gender == "feminino") Color(0xFFFDCAE1) else Color(0xFF9CE0DB)
+        val color = if (evaluation.gender == "feminino") ColorPink else ColorBlue
         var extended by remember { mutableStateOf(false) }
         Column {
             Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color.White)) {

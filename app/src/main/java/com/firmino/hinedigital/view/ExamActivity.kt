@@ -44,11 +44,13 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -284,7 +286,7 @@ class ExamActivity : ComponentActivity() {
 
         var observationText by remember { mutableStateOf(evaluationModel.comments[evaluationIndex][examIndex]) }
         var asymmetryText by remember { mutableStateOf(evaluationModel.asymmetriesComments[evaluationIndex][examIndex]) }
-        var infoVisible by remember { mutableStateOf(true) }
+        var infoVisible by remember { mutableStateOf(false) }
         var tutorialVisible by remember { mutableStateOf(false) }
         var observationVisible by remember { mutableStateOf(false) }
         var asymmetryVisible by remember { mutableStateOf(false) }
@@ -307,19 +309,11 @@ class ExamActivity : ComponentActivity() {
                         ) {
                             item { Spacer(Modifier.height(12.dp)) }
                             item {
-                                Row(modifier = Modifier.padding(bottom = 12.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                    ActionIcon(Icons.AutoMirrored.Rounded.KeyboardArrowLeft, !(examIndex == 0 && evaluationIndex == 0)) {
-                                        if (examIndex > 0) onExamChange(evaluationIndex, examIndex - 1)
-                                        else onExamChange(evaluationIndex - 1, evaluationsList[evaluationIndex - 1].exams.size - 1)
-                                    }
+                                Row(modifier = Modifier.padding(bottom = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     ToggleIcon(infoVisible, R.drawable.ic_info) { infoVisible = it }
                                     ToggleIcon(tutorialVisible, R.drawable.ic_help) { tutorialVisible = it }
                                     ToggleIcon(observationVisible, R.drawable.ic_comment, notification = observationText.isNotBlank()) { observationVisible = it }
                                     ToggleIcon(asymmetryVisible, R.drawable.ic_assymetry, notification = asymmetryText.isNotBlank()) { asymmetryVisible = it }
-                                    ActionIcon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, !(evaluationIndex == evaluationsList.size - 1 && examIndex == evaluationsList[evaluationIndex].exams.size - 1)) {
-                                        if (examIndex < evaluationsList[evaluationIndex].exams.size - 1) onExamChange(evaluationIndex, examIndex + 1)
-                                        else onExamChange(evaluationIndex + 1, 0)
-                                    }
                                 }
                             }
                             item { Column { AnimatedVisibility(visible = infoVisible) { ExamInfoView(evaluationIndex, examIndex) } } }
@@ -384,6 +378,13 @@ class ExamActivity : ComponentActivity() {
                                     onUpdate = onEvaluationUpdate
                                 )
                             }
+                            item {
+                                Column {
+                                    AnimatedVisibility(visible = !mapVisible) {
+                                        ExamMotion(evaluationIndex, examIndex, onExamChange)
+                                    }
+                                }
+                            }
                         }
                         AnimatedVisibility(visible = mapVisible) {
                             Spacer(Modifier.width(50.dp))
@@ -396,6 +397,46 @@ class ExamActivity : ComponentActivity() {
                     ExamMap(evaluationIndex = evaluationIndex, examIndex = examIndex, expanded = mapExpanded, onExpandedUpdate = { mapExpanded = it }) { i, j -> onExamChange(i, j) }
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun ExamMotion(
+        evaluationIndex: Int,
+        examIndex: Int,
+        onExamChange: (evaluation: Int, exam: Int) -> Unit
+    ) {
+        val colors = AssistChipDefaults.elevatedAssistChipColors(
+            containerColor = ColorGenderDark,
+            labelColor = Color.White,
+            leadingIconContentColor = Color.White,
+            trailingIconContentColor = Color.White,
+            disabledContainerColor = Color.Transparent,
+            disabledLabelColor = ColorGender,
+            disabledLeadingIconContentColor = ColorGender,
+            disabledTrailingIconContentColor = ColorGender,
+        )
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            ElevatedAssistChip(
+                onClick = {
+                    if (examIndex > 0) onExamChange(evaluationIndex, examIndex - 1)
+                    else onExamChange(evaluationIndex - 1, evaluationsList[evaluationIndex - 1].exams.size - 1)
+                },
+                enabled = !(examIndex == 0 && evaluationIndex == 0),
+                label = { Text(text = "Anterior") },
+                colors = colors,
+                leadingIcon = { Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null) }
+            )
+            ElevatedAssistChip(
+                onClick = {
+                    if (examIndex < evaluationsList[evaluationIndex].exams.size - 1) onExamChange(evaluationIndex, examIndex + 1)
+                    else onExamChange(evaluationIndex + 1, 0)
+                },
+                colors = colors,
+                enabled = !(evaluationIndex == evaluationsList.size - 1 && examIndex == evaluationsList[evaluationIndex].exams.size - 1),
+                label = { Text(text = "Próximo") },
+                trailingIcon = { Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null) }
+            )
         }
     }
 
@@ -509,7 +550,7 @@ class ExamActivity : ComponentActivity() {
                             )
                         }
                     }
-                    Text(text = "Score $index", fontSize = 12.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(text = "Score $index", fontSize = 12.sp, color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
                 }
                 Box(modifier = Modifier.weight(3.5f)) {
                     Text(
@@ -581,7 +622,7 @@ class ExamActivity : ComponentActivity() {
             }
             if (exam.tutorial.isNotBlank()) {
                 AnimatedContent(targetState = index) {
-                    if(it < textParagraphs.size){
+                    if (it < textParagraphs.size) {
                         Text(text = textParagraphs[it] + ".", style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, color = ColorGenderDarker)
                     }
                 }
@@ -674,24 +715,6 @@ class ExamActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun ActionIcon(icon: ImageVector, enabled: Boolean, onClick: () -> Unit) {
-        Row {
-            IconButton(
-                onClick = onClick,
-                enabled = enabled,
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = ColorGenderDark,
-                    containerColor = Color.Transparent,
-                    disabledContentColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent
-                )
-            ) {
-                Icon(icon, null)
-            }
-        }
-    }
-
-    @Composable
     private fun ToggleIcon(checked: Boolean, icon: Int, notification: Boolean = false, onDarkSurface: Boolean = false, onUpdate: (Boolean) -> Unit) {
         Row {
             IconToggleButton(
@@ -751,7 +774,10 @@ class ExamActivity : ComponentActivity() {
                                         )
                                     }
                                 }
-                                IconButton(onClick = { onExpandedUpdate(!expanded) }) {
+                                IconButton(onClick = {
+                                    onUpdate(i, 0)
+                                    onExpandedUpdate((i == evaluationIndex && 0 == examIndex).let { if (it) !expanded else false })
+                                }) {
                                     Image(painterResource(evaluationsImages[i]), modifier = Modifier.padding(6.dp), contentDescription = null)
                                 }
                             }
