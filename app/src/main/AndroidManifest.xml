@@ -25,37 +25,7 @@
         </provider>
 
         <activity
-            android:name=".view.ExamActivity"
-            android:exported="false"
-            android:label="@string/title_activity_evaluation"
-            android:theme="@style/Theme.HINEDigital" />
-        <activity
-            android:name=".view.InformationActivity"
-            android:exported="false"
-            android:label="@string/title_activity_not_implemented"
-            android:theme="@style/Theme.HINEDigital" />
-        <activity
-            android:name=".view.GuideActivity"
-            android:exported="false"
-            android:label="@string/title_activity_guide"
-            android:theme="@style/Theme.HINEDigital" />
-        <activity
-            android:name=".view.EvaluationMainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_evaluation_main"
-            android:theme="@style/Theme.HINEDigital" />
-        <activity
-            android:name=".view.ListEvaluationActivity"
-            android:exported="false"
-            android:label="@string/title_activity_evaluation_list"
-            android:theme="@style/Theme.HINEDigital" />
-        <activity
-            android:name=".view.NewEvaluationActivity"
-            android:exported="false"
-            android:label="@string/title_activity_new_evaluation"
-            android:theme="@style/Theme.HINEDigital" />
-        <activity
-            android:name=".view.MenuActivity"
+            android:name=".view.MainActivity"
             android:exported="false"
             android:label="@string/title_activity_menu"
             android:theme="@style/Theme.HINEDigital" />

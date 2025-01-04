@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">HINE Digital</string>
     <string name="title_activity_menu">MenuActivity</string>
-    <string name="title_activity_new_evaluation">NewEvaluationActivity</string>
     <string name="done_and_start">Concluir e Iniciar</string>
     <string name="name">Nome</string>
     <string name="born_date">Data de Nascimento</string>
@@ -13,7 +12,6 @@
     <string name="cephalic_size_info">O perímetro cefálico é a medida da circunferência da cabeça do bebê. Obtém-se a medida utilizando de uma fita métrica flexível ao redor da parte mais larga do crânio acima das sobrancelhas e orelhas.</string>
     <string name="weeks">Semanas</string>
     <string name="centimeter">cm</string>
-    <string name="title_activity_evaluation_list">EvaluationListActivity</string>
     <string name="last_evaluations">ÚLTIMAS AVALIAÇÕES</string>
     <string name="yes_delete">Sim, apagar</string>
     <string name="cancel">Cancelar</string>
@@ -21,12 +19,10 @@
     <string name="delete_evaluation_text">Você tem certeza que deseja apagar a avaliação selecionada?</string>
     <string name="empty">Vazio</string>
     <string name="empty_text">Nenhuma avaliação foi encontrada</string>
-    <string name="title_activity_evaluation_main">EvaluationMainActivity</string>
     <string name="new_evaluation_text">Você deseja confirmar as alterações feitas e criar uma avaliação nova com esses dados? Ao confirmar, você será encaminhado para a tela principal dessa avaliação.</string>
     <string name="new_evaluation_title">Criar Avaliação</string>
     <string name="subtitle_hine">EXAME NEUROLÓGICO\nINFANTIL DE HAMMERSMITH\n(v 20.08.20)</string>
     <string name="confirm">Sim</string>
-    <string name="title_activity_guide">GuideActivity</string>
     <string name="guide_p1">A avaliação neurológica de Hammersmith (HINE) é relativamente curta e fácil de aprender, não depende de equipamentos caros e é aplicável em qualquer ambiente clínico. Os 26 itens são divididos em 5 seções (nervos cranianos, postura, movimentos, tônus, reflexos e reações), que podem ser facilmente marcados na ficha de avaliação o da HINE e depois pontuados. Além disso, existem 2 seções que não são pontuadas, documentando os marcos do desenvolvimento motor e a idade em que foram alcançados e um registro do comportamento da criança em termos de resposta e interação durante o exame.</string>
     <string name="guide_p2">A avaliação foi validada para crianças termo e pré-termo dos 3 aos 18 meses em termos de pontuação global e predição do prognóstico motor (Paralisia Cerebral e o alcance do sentar e andar independentes). Temos usado também em crianças até 2 anos em muitos estudos, embora alguns itens envolvendo reflexos e suspensão podem ser difíceis de se avaliar pela falta de colaboração da criança e/ou a dificuldade em se deixar manipular.</string>
     <string name="guide_p3">O exame pode ser concluído em 10 a 15 minutos. É realizado preferencialmente em uma cama ou tapete no chão, mas pode ser feita no colo de um dos pais ou cuidador, desde que seja possível deitar a criança (veja a demonstração no vídeo).</string>
@@ -104,8 +100,6 @@ Prof Frances M Cowan
 Dr Miriam Martinez Biarge
 Prof Brigitte Vollmer
 Prof Leena Haataja</string>
-    <string name="title_activity_not_implemented">NotImplementedActivity</string>
-    <string name="title_activity_evaluation">EvaluationActivity</string>
     <string name="hine_guide">GUIA HINE</string>
     <string name="hine_extend">AVALIAÇÃO NEUROLÓGICA INFANTIL DE HAMMERSMITH</string>
     <string name="hine_date">(Atualização, fevereiro 2023)</string>

@@ -58,7 +58,7 @@ class IntroActivity : ComponentActivity() {
                             progressValue += 0.005f
                         }
                         if(progressValue >= 1f){
-                            startActivity(Intent(this@IntroActivity, MenuActivity::class.java))
+                            startActivity(Intent(this@IntroActivity, MainActivity::class.java))
                             finish()
                         }
                     }

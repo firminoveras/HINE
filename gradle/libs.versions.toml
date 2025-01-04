@@ -8,6 +8,7 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2024.12.01"
 lifecycleService = "2.8.7"
+navigationCompose = "2.8.5"
 pdfboxAndroid = "2.0.27.0"
 roomKtx = "2.6.1"
 lifecycleLivedataKtx = "2.8.7"
@@ -16,6 +17,7 @@ lifecycleLivedataKtx = "2.8.7"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycleService" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }

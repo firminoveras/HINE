@@ -13,8 +13,8 @@ android {
         applicationId = "com.firmino.hinedigital"
         minSdk = 26
         targetSdk = 35
-        versionCode = 32
-        versionName = "Versão 0.3.2 - Beta"
+        versionCode = 33
+        versionName = "Versão 0.3.3 - Beta"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -49,6 +49,9 @@ android {
 dependencies {
     //PDFBox
     implementation(libs.pdfbox.android)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
 
     // Core
     implementation(libs.androidx.core.splashscreen)
