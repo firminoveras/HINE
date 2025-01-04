@@ -332,12 +332,12 @@ private fun DialogEvaluationCreate(navController: NavController) {
             TextButton(onClick = {
                 navController.navigate("evaluationList")
             }) {
-                Text(text = "Confirmar")
+                Text(text = "Confirmar", color = ColorGenderDark)
             }
         },
         title = { Text(text = "Sucesso") },
         text = { Text(text = "Avaliaçao criada com sucesso.") },
-        icon = { Icon(Icons.Rounded.Check, contentDescription = null) })
+        icon = { Icon(Icons.Rounded.Check, tint = ColorGenderDark, contentDescription = null) })
 }
 
 @Composable
@@ -435,16 +435,16 @@ fun CreateConfirmDialog(
         onDismissRequest = { onDismiss() },
         confirmButton = {
             TextButton(onClick = { onConfirm() }) {
-                Text(text = "Confirmar")
+                Text(text = "Confirmar", color = ColorGenderDark)
             }
         },
         dismissButton = {
             TextButton(onClick = { onDismiss() }) {
-                Text(text = stringResource(R.string.cancel))
+                Text(text = stringResource(R.string.cancel), color = ColorGenderDark)
             }
         },
         title = { Text(text = stringResource(R.string.new_evaluation_title)) },
         text = { Text(text = stringResource(R.string.new_evaluation_text)) },
-        icon = { Icon(Icons.Rounded.CheckCircle, contentDescription = null) }
+        icon = { Icon(Icons.Rounded.CheckCircle, tint = ColorGenderDark, contentDescription = null) }
     )
 }
