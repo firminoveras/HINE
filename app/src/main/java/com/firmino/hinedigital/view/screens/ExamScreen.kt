@@ -500,6 +500,8 @@ private fun ExamItem(
     var imageAlt by remember { mutableStateOf(false) }
     imageAlt = false
 
+    LaunchedEffect(exam) { imageExpanded = false }
+
     val alpha = remember { Animatable(0f) }
     LaunchedEffect(true) {
         alpha.animateTo(
@@ -512,7 +514,7 @@ private fun ExamItem(
     }
 
     ElevatedCard(
-        modifier = Modifier.padding(bottom = 12.dp).fillMaxWidth(),
+        modifier = Modifier.padding(bottom = 12.dp).fillMaxWidth().animateContentSize(),
         colors = CardDefaults.elevatedCardColors(containerColor = if (score == index) ColorGenderDark else Color.White),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp),
         shape = RoundedCornerShape(8.dp)
@@ -567,6 +569,7 @@ private fun ExamItem(
                     ) {
                         Box(
                             modifier = Modifier
+                                .animateContentSize()
                                 .background(Brush.verticalGradient(listOf(Color("#BCEBFF".toColorInt()), Color("#FDCBFF".toColorInt()))))
                                 .fillMaxSize()
                                 .clickable { imageExpanded = !imageExpanded }
