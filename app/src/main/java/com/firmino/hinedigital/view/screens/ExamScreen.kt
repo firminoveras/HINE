@@ -70,6 +70,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -363,17 +364,19 @@ private fun Content(
                             }
                         }
                         item { ExamSubtitle(infoVisible, evaluationIndex, examIndex, exam) }
-                        items(count = exam.maxScore + 1) {
-                            ExamItem(
-                                exam = exam,
-                                model = evaluationModel,
-                                evaluationIndex = evaluationIndex,
-                                examIndex = examIndex,
-                                index = it,
-                                score = score,
-                                onScoreUpdate = { newScore -> score = newScore },
-                                onUpdate = onEvaluationUpdate
-                            )
+                        item {
+                            repeat(exam.maxScore + 1) {
+                                ExamItem(
+                                    exam = exam,
+                                    model = evaluationModel,
+                                    evaluationIndex = evaluationIndex,
+                                    examIndex = examIndex,
+                                    index = it,
+                                    score = score,
+                                    onScoreUpdate = { newScore -> score = newScore },
+                                    onUpdate = onEvaluationUpdate
+                                )
+                            }
                         }
                         item {
                             Column {
@@ -495,12 +498,8 @@ private fun ExamItem(
     val image1Id = exam.getFirstImage(index, getColorTheme(context))
     val image2Id = exam.getSecondImage(index, getColorTheme(context))
     val imageAltId = exam.getAltImage(index)
-
-    var imageExpanded by remember { mutableStateOf(false) }
-    var imageAlt by remember { mutableStateOf(false) }
-    imageAlt = false
-
-    LaunchedEffect(exam) { imageExpanded = false }
+    var imageExpanded by rememberSaveable(examIndex, evaluationIndex) { mutableStateOf(false) }
+    var imageAlt by rememberSaveable(examIndex, evaluationIndex) { mutableStateOf(false) }
 
     val alpha = remember { Animatable(0f) }
     LaunchedEffect(true) {
