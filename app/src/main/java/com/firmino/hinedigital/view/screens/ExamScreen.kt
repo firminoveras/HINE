@@ -554,7 +554,7 @@ private fun ExamItem(
             Box(modifier = Modifier.weight(3.5f)) {
                 Text(
                     modifier = Modifier.align(Alignment.CenterEnd).fillMaxWidth(if (image1Id == null) 1f else 0.7f).padding(8.dp),
-                    text = exam.getScoreTexts()[index].replace("; ", "\n").ifBlank { "Nenhuma descrição" },
+                    text = exam.getScoreTexts()[index].replace("; ", "\n").replace(": ", "\n").ifBlank { "Nenhuma descrição" },
                     color = if (score == index) Color.White else if (exam.getScoreTexts()[index].isNotBlank()) ColorGenderDarker else ColorGenderDark,
                     fontStyle = if (exam.getScoreTexts()[index].isBlank()) FontStyle.Italic else FontStyle.Normal,
                     fontWeight = if (score == index) FontWeight.Bold else FontWeight.Normal,

@@ -32,6 +32,8 @@ import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Button
@@ -46,6 +48,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -359,7 +362,7 @@ private fun EvaluationListView(
     var extended by remember { mutableStateOf(false) }
     Column {
         Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color.White)) {
-            Column(Modifier.clickable { extended = !extended }) {
+            Column(Modifier.clickable { onStart() }) {
                 Row(Modifier.heightIn(max = 72.dp)) {
                     Spacer(modifier = Modifier.width(16.dp).weight(1f).fillMaxHeight().background(color = color))
                     Column(
@@ -368,8 +371,34 @@ private fun EvaluationListView(
                             .weight(15f)
                             .fillMaxHeight(), verticalArrangement = Arrangement.Center
                     ) {
-                        Text(text = evaluation.name, fontSize = 18.sp, color = ColorGenderDark, fontWeight = FontWeight.Black, overflow = TextOverflow.Ellipsis, maxLines = 1)
-                        Text(text = "${evaluation.correctedAge} semanas", fontSize = 14.sp, color = ColorGenderDark)
+                        Text(
+                            modifier = Modifier.padding(start = 4.dp),
+                            text = evaluation.name,
+                            fontSize = 18.sp,
+                            color = ColorGenderDark,
+                            fontWeight = FontWeight.Black,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
+                        Surface(
+                            onClick = { extended = !extended },
+                            shape = RoundedCornerShape(16.dp),
+                            color = Color.Transparent
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Text(text = if (extended) "Recolher" else "Expandir", fontSize = 14.sp, color = ColorGenderDark)
+                                Icon(
+                                    modifier = Modifier.size(24.dp),
+                                    imageVector = if (extended) Icons.Rounded.KeyboardArrowUp else Icons.Rounded.KeyboardArrowDown,
+                                    contentDescription = null,
+                                    tint = ColorGenderDark
+                                )
+                            }
+                        }
                     }
                     Column(
                         Modifier
@@ -448,23 +477,13 @@ private fun EvaluationListView(
                 }
                 ElevatedButton(
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp, bottomEnd = 16.dp, bottomStart = 8.dp),
                     onClick = { onDownload() }, colors = ButtonDefaults.elevatedButtonColors(
                         containerColor = Color.White,
                         contentColor = ColorGenderDark
                     )
                 ) {
                     Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_download), contentDescription = null)
-                }
-                ElevatedButton(
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp, bottomEnd = 16.dp, bottomStart = 8.dp),
-                    onClick = { onStart() }, colors = ButtonDefaults.elevatedButtonColors(
-                        containerColor = Color.White,
-                        contentColor = ColorGenderDark
-                    )
-                ) {
-                    Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_exam_start), contentDescription = null)
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.firmino.hinedigital.view.theme
 
 import android.content.Context
 import androidx.compose.ui.graphics.Color
+import androidx.core.content.edit
 
 enum class ThemeGender { FEMALE, MALE }
 
@@ -38,7 +39,7 @@ fun toggleTheme(context: Context): Boolean{
 }
 
 fun setColorTheme(themeGender: ThemeGender, context: Context) {
-    context.getSharedPreferences("com.firmino.hinedigital", Context.MODE_PRIVATE).edit().putBoolean("theme", themeGender == ThemeGender.FEMALE).apply()
+    context.getSharedPreferences("com.firmino.hinedigital", Context.MODE_PRIVATE).edit { putBoolean("theme", themeGender == ThemeGender.FEMALE) }
     when (themeGender) {
         ThemeGender.FEMALE -> {
             ColorGenderDarker = ColorPinkDarker

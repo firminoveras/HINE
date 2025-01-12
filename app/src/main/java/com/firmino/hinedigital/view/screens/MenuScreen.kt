@@ -2,7 +2,6 @@ package com.firmino.hinedigital.view.screens
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -51,6 +50,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.firmino.hinedigital.R
 import com.firmino.hinedigital.extensions.BallsAnim
@@ -73,7 +73,7 @@ fun MenuScreen(navController: NavController) {
     var dialogLicencesVisible by remember { mutableStateOf(false) }
 
     if (dialogDeveloperVisible) DialogDeveloperNotes(onDismiss = { dialogDeveloperVisible = false }) {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/firminoveras")))
+        context.startActivity(Intent(Intent.ACTION_VIEW, "https://github.com/firminoveras".toUri()))
     }
     if (dialogLicencesVisible) DialogLicencesNotes(onDismiss = { dialogLicencesVisible = false })
 
