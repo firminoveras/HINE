@@ -1,4 +1,5 @@
-![logo](https://github.com/firminoveras/HINE/assets/logo1.png)
+![logo](/assets/logo1.png)
+
 
 # 🧠 HINE
 HINE Digital é um aplicativo desenvolvido para auxiliar no diagnóstico precoce de Paralisia Cerebral infantil. Com uma abordagem inovadora, o aplicativo oferece ferramentas práticas e acessíveis para apoiar profissionais de saúde no monitoramento e avaliação do desenvolvimento neurológico de crianças.
@@ -18,17 +19,16 @@ O HINE Digital foi desenvolvido em Kotlin, utilizando tecnologias modernas para 
 
 ## 📚 Solução
 Este projeto é uma solução desenvolvida no âmbito do **Mestrado Profissional em Saúde da Família**, ofertado pela **Facene**. Ele busca contribuir diretamente para a área da saúde com foco em diagnósticos precoces e intervenções eficazes.
-![logo](https://github.com/firminoveras/HINE/assets/logo2.png)
+![logo](/assets/logo2.png)
 
 ## 🎨 Identidade visual
 A identidade visual do HINE Digital foi cuidadosamente projetada para criar um ambiente acolhedor e apropriado para jovens bebês. O aplicativo utiliza uma paleta de cores pastéis em tons de rosa e azul, transmitindo tranquilidade e conforto, enquanto reforça a conexão com o público infantil e os profissionais da saúde.
-> ![logo](https://github.com/firminoveras/HINE/assets/logo3.png)
+![logo](/assets/logo3.png)
 
 ## 🌐 Site do projeto
 [Clicando aqui](https://firminoveras.github.io/HINE-Page/) é acessar o site do projeto, bem como sua política de privacidade.
 
 ## 🛡️ Licença
-![logo](https://github.com/firminoveras/HINE/assets/logo4.png)
 MIT License
 
 Copyright (c) 2025 Firmino Veras
