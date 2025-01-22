@@ -213,9 +213,9 @@ val informationItems = listOf(
     Title(
         title = "Folder II",
         smallTitle = "Folder II",
-        icon = R.drawable.bg_hine_folder2,
+        icon = R.drawable.ic_folder,
         items = listOf(
-            Paragraph(R.drawable.bg_hine_folder, ParagraphType.IMAGE)
+            Paragraph(R.drawable.bg_hine_folder2, ParagraphType.IMAGE)
         )
     ),
 )

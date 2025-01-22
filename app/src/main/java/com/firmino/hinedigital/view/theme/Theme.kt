@@ -20,16 +20,6 @@ private val DarkColorScheme = darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = ColorGenderDark, secondary = ColorGender, tertiary = ColorGenderDarker
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
 
 val fontZenDots = FontFamily(Font(R.font.zendots, FontWeight.Normal))
@@ -51,8 +41,5 @@ fun HINEDigitalTheme(
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
-
-    MaterialTheme(
-        colorScheme = LightColorScheme, typography = Typography, content = content
-    )
+    MaterialTheme(colorScheme = LightColorScheme, typography = Typography, content = content)
 }

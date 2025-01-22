@@ -42,14 +42,12 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -308,10 +306,30 @@ private fun Content(
                         item { Spacer(Modifier.height(12.dp)) }
                         item {
                             Row(modifier = Modifier.padding(bottom = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                AnimatedVisibility(visible = !mapVisible) {
+                                    MotionIcon(
+                                        icon = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
+                                        enabled = !(examIndex == 0 && evaluationIndex == 0),
+                                        onClick = {
+                                            if (examIndex > 0) onExamChange(evaluationIndex, examIndex - 1)
+                                            else onExamChange(evaluationIndex - 1, evaluationsList[evaluationIndex - 1].exams.size - 1)
+                                        }
+                                    )
+                                }
                                 ToggleIcon(infoVisible, R.drawable.ic_info) { infoVisible = it }
                                 ToggleIcon(tutorialVisible, R.drawable.ic_help) { tutorialVisible = it }
                                 ToggleIcon(observationVisible, R.drawable.ic_comment, notification = observationText.isNotBlank()) { observationVisible = it }
                                 ToggleIcon(asymmetryVisible, R.drawable.ic_assymetry, notification = asymmetryText.isNotBlank()) { asymmetryVisible = it }
+                                AnimatedVisibility(visible = !mapVisible) {
+                                    MotionIcon(
+                                        icon = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                                        enabled = !(evaluationIndex == evaluationsList.size - 1 && examIndex == evaluationsList[evaluationIndex].exams.size - 1),
+                                        onClick = {
+                                            if (examIndex < evaluationsList[evaluationIndex].exams.size - 1) onExamChange(evaluationIndex, examIndex + 1)
+                                            else onExamChange(evaluationIndex + 1, 0)
+                                        }
+                                    )
+                                }
                             }
                         }
                         item { Column { AnimatedVisibility(visible = infoVisible) { ExamInfoView(evaluationIndex, examIndex) } } }
@@ -378,13 +396,6 @@ private fun Content(
                                 )
                             }
                         }
-                        item {
-                            Column {
-                                AnimatedVisibility(visible = !mapVisible) {
-                                    ExamMotion(evaluationIndex, examIndex, onExamChange)
-                                }
-                            }
-                        }
                     }
                     AnimatedVisibility(visible = mapVisible) {
                         Spacer(Modifier.width(50.dp))
@@ -401,43 +412,22 @@ private fun Content(
 }
 
 @Composable
-private fun ExamMotion(
-    evaluationIndex: Int,
-    examIndex: Int,
-    onExamChange: (evaluation: Int, exam: Int) -> Unit
+fun MotionIcon(
+    icon: ImageVector,
+    enabled: Boolean,
+    onClick: () -> Unit
 ) {
-    val colors = AssistChipDefaults.elevatedAssistChipColors(
-        containerColor = ColorGenderDark,
-        labelColor = Color.White,
-        leadingIconContentColor = Color.White,
-        trailingIconContentColor = Color.White,
-        disabledContainerColor = Color.Transparent,
-        disabledLabelColor = ColorGender,
-        disabledLeadingIconContentColor = ColorGender,
-        disabledTrailingIconContentColor = ColorGender,
+    IconButton(
+        onClick = onClick,
+        enabled = enabled,
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = Color.Transparent,
+            contentColor = ColorGenderDarker,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = Color.Transparent
+        ),
+        content = { Icon(icon, null) }
     )
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        ElevatedAssistChip(
-            onClick = {
-                if (examIndex > 0) onExamChange(evaluationIndex, examIndex - 1)
-                else onExamChange(evaluationIndex - 1, evaluationsList[evaluationIndex - 1].exams.size - 1)
-            },
-            enabled = !(examIndex == 0 && evaluationIndex == 0),
-            label = { Text(text = "Anterior") },
-            colors = colors,
-            leadingIcon = { Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft, contentDescription = null) }
-        )
-        ElevatedAssistChip(
-            onClick = {
-                if (examIndex < evaluationsList[evaluationIndex].exams.size - 1) onExamChange(evaluationIndex, examIndex + 1)
-                else onExamChange(evaluationIndex + 1, 0)
-            },
-            colors = colors,
-            enabled = !(evaluationIndex == evaluationsList.size - 1 && examIndex == evaluationsList[evaluationIndex].exams.size - 1),
-            label = { Text(text = "Próximo") },
-            trailingIcon = { Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null) }
-        )
-    }
 }
 
 @Composable
