@@ -121,6 +121,9 @@ fun Menu(navController: NavController) {
     ButtonSecondary(label = "Informações") {
         navController.navigate("information")
     }
+    ButtonSecondary(label = "Política de Privacidade") {
+        navController.navigate("policy")
+    }
 }
 
 @Composable

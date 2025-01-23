@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.firmino.hinedigital.HINEApplication
 import com.firmino.hinedigital.extensions.guideItems
 import com.firmino.hinedigital.extensions.informationItems
+import com.firmino.hinedigital.extensions.policyItems
 import com.firmino.hinedigital.view.screens.EvaluationListScreen
 import com.firmino.hinedigital.view.screens.EvaluationResumeScreen
 import com.firmino.hinedigital.view.screens.ExamScreen
@@ -78,6 +79,15 @@ class MainActivity : ComponentActivity() {
                             title = "Guia HINE",
                             subtitle = "Guia para o Preenchimento da Avaliação",
                             info = "Atualizado em 02/2023"
+                        )
+                    }
+                    composable("policy") {
+                        TextContentScreen(
+                            navController = navController,
+                            textItems = policyItems,
+                            title = "Política de Privacidade",
+                            subtitle = "HINE Digital",
+                            info = "Atualizado em 07/2024"
                         )
                     }
                 }

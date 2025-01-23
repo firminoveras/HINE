@@ -35,7 +35,7 @@ data class Evaluation(
         mutableListOf("", "", "", "", "", "", "", ""),
         mutableListOf("", "", ""),
     ),
-    @ColumnInfo(name = "asymmetries") var asymmetries:MutableList<MutableList<Int>> = mutableListOf(
+    @ColumnInfo(name = "asymmetries") var asymmetries: MutableList<MutableList<Int>> = mutableListOf(
         mutableListOf(0, 0, 0, 0, 0),
         mutableListOf(0, 0, 0, 0, 0, 0),
         mutableListOf(0, 0),
@@ -44,7 +44,7 @@ data class Evaluation(
         mutableListOf(0, 0, 0, 0, 0, 0, 0, 0),
         mutableListOf(0, 0, 0),
     ),
-    @ColumnInfo(name = "asymmetries_comments") var asymmetriesComments:MutableList<MutableList<String>> = mutableListOf(
+    @ColumnInfo(name = "asymmetries_comments") var asymmetriesComments: MutableList<MutableList<String>> = mutableListOf(
         mutableListOf("", "", "", "", ""),
         mutableListOf("", "", "", "", "", ""),
         mutableListOf("", ""),
@@ -53,17 +53,27 @@ data class Evaluation(
         mutableListOf("", "", "", "", "", "", "", ""),
         mutableListOf("", "", ""),
     ),
-    ) {
+) {
 
     fun getGlobalScore(): Int {
         var count = 0
-        scores.forEachIndexed{ index, ints -> if(index < 5) count += ints.sum() }
+        scores.forEachIndexed { index, ints -> if (index < 5) count += ints.sum() }
         return count
     }
 
     fun getComportamentalScore(): Int {
         var count = 0
-        scores.forEachIndexed{ index, ints -> if(index >= 5) count += ints.sum() }
+        scores.forEachIndexed { index, ints -> if (index >= 5) count += ints.sum() }
+        return count
+    }
+
+    fun getCommentsCount(): Int {
+        var count = 0
+        comments.forEach { evaluation ->
+            evaluation.forEach { exam ->
+                count += if (exam.isNotEmpty()) 1 else 0
+            }
+        }
         return count
     }
 

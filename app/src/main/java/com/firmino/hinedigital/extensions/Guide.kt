@@ -379,3 +379,119 @@ val guideItems = listOf(
         )
     ),
 )
+
+val policyItems = listOf(
+    Title(
+        title = "1. Tipos de dados coletados",
+        smallTitle = "Tipos de Dados",
+        icon = R.drawable.ic_policy1,
+        items = listOf(
+            Paragraph(R.string.policy_p1, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p2, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p3, ParagraphType.PARAGRAPH),
+        )
+    ),
+    Title(
+        title = "2. Modo e local de processamento dos dados",
+        smallTitle = "Processamento",
+        icon = R.drawable.ic_policy2,
+        items = listOf(
+            Paragraph(R.string.policy_p4, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p5, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p6, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p7, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p8, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p9, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p10, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p11, ParagraphType.PARAGRAPH),
+        )
+    ),
+    Title(
+        title = "3. Informações detalhadas sobre o processamento de dados pessoais",
+        smallTitle = "Detalhes",
+        icon = R.drawable.ic_policy3,
+        items = listOf(
+            Paragraph(R.string.policy_p12, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p13, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p14, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p15, ParagraphType.PARAGRAPH),
+        )
+    ),
+    Title(
+        title = "4. Informações adicionais sobre a coleta e processamento de dados",
+        smallTitle = "Coleta de Dados",
+        icon = R.drawable.ic_policy4,
+        items = listOf(
+            Paragraph(R.string.policy_p16, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p17, ParagraphType.PARAGRAPH),
+        )
+    ),
+    Title(
+        title = "5. Informações adicionais sobre os dados pessoais do usuário",
+        smallTitle = "Dados Pessoais",
+        icon = R.drawable.ic_policy5,
+        items = listOf(
+            Paragraph(R.string.policy_p18, ParagraphType.PARAGRAPH),
+        )
+    ),
+    Title(
+        title = "6. Logs do sistema e manutenção",
+        smallTitle = "Logs",
+        icon = R.drawable.ic_policy6,
+        items = listOf(
+            Paragraph(R.string.policy_p19, ParagraphType.PARAGRAPH),
+        )
+    ),
+    Title(
+        title = "7. As informações não contidas nesta política",
+        smallTitle = "Outro",
+        icon = R.drawable.ic_policy7,
+        items = listOf(
+            Paragraph(R.string.policy_p20, ParagraphType.PARAGRAPH),
+        )
+    ),
+    Title(
+        title = "8. Os direitos dos usuários",
+        smallTitle = "Direitos",
+        icon = R.drawable.ic_policy8,
+        items = listOf(
+            Paragraph(R.string.policy_p21, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p22, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p23, ParagraphType.PARAGRAPH),
+        )
+    ),
+    Title(
+        title = "9. Mudanças nesta política de privacidade",
+        smallTitle = "Mudanças",
+        icon = R.drawable.ic_policy9,
+        items = listOf(
+            Paragraph(R.string.policy_p24, ParagraphType.PARAGRAPH),
+        )
+    ),
+    Title(
+        title = "10. Definições e referências jurídicas",
+        smallTitle = "Definições",
+        icon = R.drawable.ic_policy10,
+        items = listOf(
+            Paragraph(R.string.policy_p25, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p26, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p27, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p28, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p29, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p30, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p31, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p32, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p33, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p34, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p35, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p36, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p37, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p38, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p39, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p40, ParagraphType.PARAGRAPH),
+            Paragraph(R.string.policy_p41, ParagraphType.TOPIC),
+            Paragraph(R.string.policy_p42, ParagraphType.SUBTITLE),
+            Paragraph(R.string.policy_p43, ParagraphType.TOPIC),
+        )
+    ),
+)

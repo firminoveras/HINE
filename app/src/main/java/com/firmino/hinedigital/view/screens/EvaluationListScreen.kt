@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -28,7 +31,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
@@ -46,8 +49,11 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -59,6 +65,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -75,10 +82,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -114,6 +123,15 @@ import kotlin.math.min
 
 private var uriId by mutableStateOf(Uri.EMPTY)
 
+enum class Filter {
+    MASCULINO,
+    FEMININO,
+    VAZIO,
+    INICIADO,
+    COMENTARIO,
+    ASSIMETRIA,
+}
+
 @Composable
 fun EvaluationListScreen(navController: NavController, viewModel: EvaluationViewModel) {
     val context = LocalContext.current
@@ -147,8 +165,11 @@ private fun Content(viewModel: EvaluationViewModel, context: Context, navControl
     var deleteId by remember { mutableLongStateOf(-1L) }
     var downloadId by remember { mutableLongStateOf(-1L) }
 
+    val filters = remember { mutableStateListOf<Filter>() }
+    var filterExpanded by remember { mutableStateOf(false) }
+
     var evaluations by remember { mutableStateOf(listOf<Evaluation>()) }
-    viewModel.allEvaluations.observe(context as MainActivity) { evaluations = it }
+    viewModel.allEvaluations.observe(context as MainActivity) { evaluations = it.reversed() }
 
     if (deleteId >= 0) {
         DialogConfirm(
@@ -180,15 +201,40 @@ private fun Content(viewModel: EvaluationViewModel, context: Context, navControl
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp, alignment = Alignment.Top)
     ) {
-        SearchEvaluations(onUpdate = { searchText = it }, value = searchText, onClear = { searchText = "" })
+        SearchEvaluations(
+            onUpdate = { searchText = it },
+            value = searchText,
+            isFilterVisible = filterExpanded,
+            onFilterClick = {
+                filterExpanded = !filterExpanded
+                if (!filterExpanded) filters.clear()
+            }
+        )
+        Spacer(Modifier.height(24.dp))
+        AnimatedVisibility(visible = filterExpanded) {
+            Filters(selectedFilters = filters) {
+                filters.clear()
+                filters.addAll(it)
+            }
+        }
 
-        if (evaluations.none { it.name.contains(searchText.trim(), true) }) {
-            EmptyContainer(query = searchText.trim())
+        val filteredEvaluations = evaluations
+            .asSequence()
+            .filter { it.name.contains(searchText.trim(), true) || searchText.isEmpty() }
+            .filter { if (Filter.MASCULINO in filters) it.gender.lowercase() == "masculino" else true }
+            .filter { if (Filter.FEMININO in filters) it.gender.lowercase() == "feminino" else true }
+            .filter { if (Filter.VAZIO in filters) it.getGlobalScore() == 0 else true }
+            .filter { if (Filter.INICIADO in filters) it.getGlobalScore() > 0 else true }
+            .filter { if (Filter.COMENTARIO in filters) it.getCommentsCount() > 0 else true }
+            .filter { if (Filter.ASSIMETRIA in filters) it.getAssymetriesCount() > 0 else true }
+            .toList()
+
+        if (filteredEvaluations.isEmpty()) {
+            EmptyContainer(query = searchText.trim(), filters = filters)
         } else {
             LazyColumn(Modifier.padding(horizontal = 24.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                items(evaluations.filter { it.name.contains(searchText.trim(), true) || searchText.isEmpty() }, key = { it.id }) {
+                items(filteredEvaluations, key = { it.id }) {
                     var showDialogEdit by remember { mutableStateOf(false) }
                     if (showDialogEdit) EditDialog(it, onDismiss = { showDialogEdit = false }, onConfirm = { newEvaluation ->
                         showDialogEdit = false
@@ -204,9 +250,36 @@ private fun Content(viewModel: EvaluationViewModel, context: Context, navControl
                     )
                 }
                 item {
-                    ListFooter(evaluations.size)
+                    ListFooter(evaluations.size, filteredEvaluations.size)
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun Filters(selectedFilters: List<Filter>, onUpdate: (List<Filter>) -> Unit) {
+    Box(Modifier.padding(bottom = 24.dp)) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            item { Spacer(Modifier.width(12.dp)) }
+            items(Filter.entries.toTypedArray()) {
+                FilterChip(
+                    selected = it in selectedFilters,
+                    label = { Text(it.name.lowercase().capitalize(Locale.current)) },
+                    leadingIcon = { if (it in selectedFilters) Icon(imageVector = Icons.Rounded.Check, contentDescription = null) },
+                    colors = FilterChipDefaults.filterChipColors(
+                        labelColor = Color.White,
+                        selectedContainerColor = ColorGenderDark,
+                        selectedLabelColor = Color.White,
+                        selectedLeadingIconColor = Color.White
+                    ),
+                    border = BorderStroke(1.dp, if (it in selectedFilters) Color.Transparent else Color.White),
+                    onClick = {
+                        onUpdate(selectedFilters.toMutableList().apply { if (it in this) remove(it) else add(it) })
+                    }
+                )
+            }
+            item { Spacer(Modifier.width(12.dp)) }
         }
     }
 }
@@ -331,7 +404,9 @@ private fun downloadEvaluationPdf(evaluation: Evaluation, context: Context, comm
 }
 
 @Composable
-fun EmptyContainer(query: String = "") {
+fun EmptyContainer(query: String = "", filters: List<Filter>) {
+    var filtersText = ""
+    if (filters.isNotEmpty()) filters.forEach { filtersText += it.name.lowercase().capitalize(Locale.current) + "; " }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -340,13 +415,14 @@ fun EmptyContainer(query: String = "") {
     ) {
         Image(bitmap = ImageBitmap.imageResource(id = R.drawable.bg_empty), contentDescription = null, contentScale = ContentScale.Inside)
         Text(text = stringResource(R.string.empty), color = Color.White, fontSize = 64.sp, fontWeight = FontWeight.Black)
-        Text(text = stringResource(R.string.empty_text), color = Color.White, fontSize = 16.sp, textAlign = TextAlign.Center)
-        if (query.isNotBlank()) Text(text = "para a busca de \"$query\"", color = Color.White, fontSize = 16.sp)
+        Text(text = stringResource(R.string.empty_text), color = Color.White, fontSize = 14.sp, textAlign = TextAlign.Center)
+        if (query.isNotBlank()) Text(text = "para a busca de \"$query\"", color = Color.White, fontSize = 14.sp)
+        if (filters.isNotEmpty()) Text(text = "${if (query.isNotBlank()) "e " else ""}para os filtros $filtersText", color = Color.White, fontSize = 14.sp, textAlign = TextAlign.Center)
     }
 }
 
 @Composable
-private fun ListFooter(size: Int) {
+private fun ListFooter(total: Int, filtered: Int) {
     Column {
         Spacer(
             modifier = Modifier
@@ -358,7 +434,11 @@ private fun ListFooter(size: Int) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             modifier = Modifier.fillMaxWidth().padding(bottom = 92.dp),
-            text = "$size ite${if (size > 1) "ns" else "m"} encontrado${if (size > 1) "s" else ""}.",
+            text = if (total == filtered) {
+                "$total ite${if (total > 1) "ns" else "m"} encontrado${if (total > 1) "s" else ""}."
+            } else {
+                "$filtered ite${if (filtered > 1) "ns" else "m"} encontrado${if (filtered > 1) "s" else ""} de um total de $total."
+            },
             style = MaterialTheme.typography.labelLarge,
             textAlign = TextAlign.Center, color = Color.White,
         )
@@ -509,7 +589,8 @@ private fun EvaluationListView(
 fun SearchEvaluations(
     maxLength: Int = 256,
     value: String = "",
-    onClear: () -> Unit = {},
+    isFilterVisible: Boolean,
+    onFilterClick: () -> Unit = {},
     onUpdate: (value: String) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
@@ -524,11 +605,13 @@ fun SearchEvaluations(
             )
         },
         trailingIcon = {
-            if (value.isNotBlank()) Icon(
-                imageVector = Icons.Rounded.Clear,
-                contentDescription = null,
-                tint = ColorGenderDark,
-                modifier = Modifier.clickable { onClear() })
+            IconButton(onClick = { onFilterClick() }) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(if (isFilterVisible) R.drawable.ic_filter_off else R.drawable.ic_filter),
+                    contentDescription = null,
+                    tint = ColorGenderDark
+                )
+            }
         },
         onValueChange = {
             onUpdate(it.substring(0, min(it.length, maxLength)))
