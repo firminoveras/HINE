@@ -10,7 +10,7 @@ import com.firmino.hinedigital.model.converters.ConverterStringArray
 @Entity(tableName = "evaluation_table")
 @TypeConverters(ConverterIntArray::class, ConverterStringArray::class)
 data class Evaluation(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long = 0L,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "gender") val gender: String,
     @ColumnInfo(name = "birthday") val birthday: String,

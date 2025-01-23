@@ -9,12 +9,12 @@ class EvaluationRepository(private val evaluationDao: EvaluationDao) {
     val allEvaluations: Flow<List<Evaluation>> = evaluationDao.getAll()
 
     @WorkerThread
-    suspend fun insert(evaluation: Evaluation) {
-        evaluationDao.insert(evaluation)
+    suspend fun insert(evaluation: Evaluation): Long {
+        return evaluationDao.insert(evaluation)
     }
 
     @WorkerThread
-    suspend fun delete(id: Int) {
+    suspend fun delete(id: Long) {
         evaluationDao.delete(id)
     }
 

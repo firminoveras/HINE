@@ -14,10 +14,10 @@ interface EvaluationDao {
     fun getAll(): Flow<List<Evaluation>>
 
     @Insert(onConflict = REPLACE)
-    suspend fun insert(evaluation: Evaluation)
+    suspend fun insert(evaluation: Evaluation): Long
 
     @Query("DELETE FROM evaluation_table WHERE id = :id")
-    suspend fun delete(id: Int)
+    suspend fun delete(id: Long)
 
     @Update(onConflict = REPLACE)
     suspend fun update(evaluation: Evaluation)

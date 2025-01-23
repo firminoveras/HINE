@@ -111,7 +111,7 @@ import kotlinx.coroutines.launch
 fun ExamScreen(
     navController: NavController,
     viewModel: EvaluationViewModel,
-    id: Int?,
+    id: Long?,
     index: Int,
 ) {
     val context = LocalContext.current

@@ -25,12 +25,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
-import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -71,6 +71,7 @@ import com.firmino.hinedigital.R
 import com.firmino.hinedigital.extensions.Header
 import com.firmino.hinedigital.extensions.toBrazilianDateFormat
 import com.firmino.hinedigital.model.entity.Evaluation
+import com.firmino.hinedigital.view.MainActivity
 import com.firmino.hinedigital.view.theme.ColorGender
 import com.firmino.hinedigital.view.theme.ColorGenderDark
 import com.firmino.hinedigital.view.theme.ColorGenderDarker
@@ -108,7 +109,6 @@ private fun Content(
     var correctedAge by remember { mutableStateOf("") }
     var cephalicSize by remember { mutableStateOf("") }
     var create by remember { mutableStateOf(false) }
-    var created by remember { mutableStateOf(false) }
     var showDatePickerDialog by remember { mutableStateOf(false) }
 
     key(genderTheme) {
@@ -131,17 +131,20 @@ private fun Content(
                             correctedAge = correctedAge.toInt(),
                             cephalicSize = cephalicSize.toInt()
                         )
-                    )
-                    created = true
-                    create = false
+                    ).observe(context as MainActivity) { id ->
+                        create = false
+                        navController.navigate("evaluationResume/$id") {
+                            popUpTo(navController.currentDestination?.route ?: "menu") {
+                                inclusive = true
+                            }
+                        }
+                    }
                 },
                 onDismiss = {
                     create = false
                 }
             )
         }
-
-        if (created) DialogEvaluationCreate(navController = navController)
 
         val pageState = rememberPagerState(initialPage = 0, pageCount = { 5 })
         val rememberCoroutine = rememberCoroutineScope()
@@ -325,22 +328,6 @@ private fun GenderSelector(gender: String, onGenderUpdate: (gender: String) -> U
 }
 
 @Composable
-private fun DialogEvaluationCreate(navController: NavController) {
-    AlertDialog(
-        onDismissRequest = { },
-        confirmButton = {
-            TextButton(onClick = {
-                navController.navigate("evaluationList")
-            }) {
-                Text(text = "Confirmar", color = ColorGenderDark)
-            }
-        },
-        title = { Text(text = "Sucesso") },
-        text = { Text(text = "Avaliaçao criada com sucesso.") },
-        icon = { Icon(Icons.Rounded.Check, tint = ColorGenderDark, contentDescription = null) })
-}
-
-@Composable
 private fun DoneButton(
     modifier: Modifier = Modifier,
     label: String,
@@ -431,20 +418,36 @@ fun CreateConfirmDialog(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
+    var isLoading by remember { mutableStateOf(false) }
     AlertDialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = { },
         confirmButton = {
-            TextButton(onClick = { onConfirm() }) {
-                Text(text = "Confirmar", color = ColorGenderDark)
+            AnimatedVisibility(visible = !isLoading) {
+                TextButton(onClick = {
+                    isLoading = true
+                    onConfirm()
+                }) { Text(text = "Confirmar", color = ColorGenderDark) }
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismiss() }) {
-                Text(text = stringResource(R.string.cancel), color = ColorGenderDark)
+            AnimatedVisibility(visible = !isLoading) {
+                TextButton(onClick = { onDismiss() }) {
+                    Text(text = stringResource(R.string.cancel), color = ColorGenderDark)
+                }
             }
         },
         title = { Text(text = stringResource(R.string.new_evaluation_title)) },
-        text = { Text(text = stringResource(R.string.new_evaluation_text)) },
+        text = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = stringResource(R.string.new_evaluation_text))
+                AnimatedVisibility(visible = isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(top = 8.dp),
+                        color = ColorGenderDark
+                    )
+                }
+            }
+        },
         icon = { Icon(Icons.Rounded.CheckCircle, tint = ColorGenderDark, contentDescription = null) }
     )
 }

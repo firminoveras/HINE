@@ -62,7 +62,7 @@ import com.firmino.hinedigital.view.theme.setColorTheme
 import com.firmino.hinedigital.viewmodel.EvaluationViewModel
 
 @Composable
-fun EvaluationResumeScreen(navController: NavController, viewModel: EvaluationViewModel, id: Int?) {
+fun EvaluationResumeScreen(navController: NavController, viewModel: EvaluationViewModel, id: Long?) {
     val context = LocalContext.current
     var evaluations by remember { mutableStateOf(listOf<Evaluation>()) }
     viewModel.allEvaluations.observe(context as MainActivity) { evaluations = it }

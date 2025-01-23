@@ -3,6 +3,7 @@ package com.firmino.hinedigital.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.firmino.hinedigital.model.entity.Evaluation
 import com.firmino.hinedigital.model.repository.EvaluationRepository
@@ -16,15 +17,15 @@ class EvaluationViewModel(private val repository: EvaluationRepository) : ViewMo
         get() =
             _allEvaluations
 
-    fun insert(evaluation: Evaluation) = viewModelScope.launch {
-        repository.insert(evaluation)
+    fun insert(evaluation: Evaluation) = liveData {
+        emit(repository.insert(evaluation))
     }
 
     fun update(evaluation: Evaluation) = viewModelScope.launch {
         repository.update(evaluation)
     }
 
-    fun delete(id: Int) = viewModelScope.launch {
+    fun delete(id: Long) = viewModelScope.launch {
         repository.delete(id)
     }
 }

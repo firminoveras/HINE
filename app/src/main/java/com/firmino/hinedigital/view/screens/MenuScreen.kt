@@ -112,10 +112,7 @@ fun MenuScreen(navController: NavController) {
 
 @Composable
 fun Menu(navController: NavController) {
-    ButtonPrimary(label = "Nova Avaliação", icon = Icons.AutoMirrored.Rounded.ArrowForward) {
-        navController.navigate("newEvaluation")
-    }
-    ButtonSecondary(label = "Últimas Avaliações") {
+    ButtonPrimary(label = "Avaliações", icon = Icons.AutoMirrored.Rounded.ArrowForward) {
         navController.navigate("evaluationList")
     }
     ButtonSecondary(label = "Guia Hine") {

@@ -51,14 +51,14 @@ class MainActivity : ComponentActivity() {
                         EvaluationResumeScreen(
                             navController = navController,
                             viewModel = viewModel,
-                            id = it.arguments?.getString("id")?.toInt()
+                            id = it.arguments?.getString("id")?.toLong()
                         )
                     }
                     composable("exam/{id}/{index}") {
                         ExamScreen(
                             navController = navController,
                             viewModel = viewModel,
-                            id = it.arguments?.getString("id")?.toInt(),
+                            id = it.arguments?.getString("id")?.toLong(),
                             index = it.arguments?.getString("index")?.toInt() ?: 0
                         )
                     }
