@@ -46,6 +46,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -882,7 +883,13 @@ fun DatePickerModal(
             TextButton(onClick = onDismiss) {
                 Text("Cancelar", color = ColorGenderDark)
             }
-        }
+        },
+        colors = DatePickerDefaults.colors(
+            selectedDayContentColor = ColorGenderDark,
+            todayDateBorderColor = ColorGenderDark,
+            todayContentColor = ColorGenderDark,
+            yearContentColor = ColorGenderDark,
+        )
     ) {
         DatePicker(state = datePickerState)
     }

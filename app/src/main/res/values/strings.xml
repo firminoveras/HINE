@@ -100,7 +100,7 @@ Dr Miriam Martinez Biarge
 Prof Brigitte Vollmer
 Prof Leena Haataja</string>
     <string name="pdf_view_text">Para visualizar o PDF gerado, é necessário um aplicativo compatível com arquivos PDF. Caso não possua um instalado, é recomendado a instalação de um visualizador de PDF gratuito, disponível nas lojas de aplicativos do seu dispositivo. Alguns dos aplicativos mais populares incluem o Adobe Acrobat Reader, o Foxit Reader e o Google Drive.</string>
-    <string name="hint_birthdate">Toque para inserir…</string>
+    <string name="hint_birthdate">Toque para inserir</string>
     <string name="info_p1">Paralisia Cerebral, PC ou Encefalopatia Crônica não Progressivas</string>
     <string name="info_p2">Definição</string>
     <string name="info_p3">Desordem cerebral permanente não progressiva do sistema nervoso  central (SNC).</string>
@@ -185,7 +185,7 @@ Prof Leena Haataja</string>
     <string name="policy_p29">Usuário</string>
     <string name="policy_p30">A pessoa que usa este aplicativo que deverá coincidir com ou estar autorizada pelo titular dos dados a quem os dados pessoais se referem.</string>
     <string name="policy_p31">Titular dos dados</string>
-    <string name="policy_p32">Titular dos dados</string>
+    <string name="policy_p32">A pessoa jurídica ou física a quem os dados pessoais se referem.</string>
     <string name="policy_p33">Processador de dados (ou supervisor de dados)</string>
     <string name="policy_p34">A pessoa física, pessoa jurídica, a administração pública ou qualquer outro órgão, associação ou organização autorizada pelo controlador de dados para o processamento dos dados pessoais em conformidade com esta política de privacidade.</string>
     <string name="policy_p35">Controlador de dados (ou proprietário)</string>

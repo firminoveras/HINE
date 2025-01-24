@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.firmino.hinedigital.R
 
-
 @Composable
 fun BallsAnim(modifier: Modifier = Modifier) {
     val displayMetrics = LocalContext.current.resources.displayMetrics
